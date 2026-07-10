@@ -22,6 +22,7 @@ import {
   AppointmentModal,
   type AppointmentFormValues,
 } from "./AppointmentModal";
+import { Button } from "@/components/ui/Button";
 
 const RANGE_START_HOUR = 9;
 const HOURS = [9, 10, 11, 12, 13, 14, 15, 16] as const;
@@ -186,14 +187,10 @@ export function DayCalendar() {
             </button>
           </div>
 
-          <button
-            type="button"
-            onClick={openCreateModal}
-            className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-colors hover:opacity-90"
-          >
+          <Button onClick={openCreateModal} className="px-3 py-1.5">
             <Plus className="h-4 w-4" />
             תור חדש
-          </button>
+          </Button>
         </div>
       </div>
 

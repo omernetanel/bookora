@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, Trash2 } from "lucide-react";
 import { services, staffMembers, type DayAppointment } from "@/lib/mock-schedule";
+import { Button } from "@/components/ui/Button";
 
 export type AppointmentFormValues = {
   clientName: string;
@@ -204,35 +205,26 @@ export function AppointmentModal({
 
               <div className="flex items-center justify-between pt-2">
                 {isEditing ? (
-                  <button
-                    type="button"
+                  <Button
+                    variant="ghost"
                     onClick={() => {
                       onCancelAppointment(editingAppointment.id);
                       onClose();
                     }}
-                    className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-destructive transition-colors hover:bg-destructive/10"
+                    className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                   >
                     <Trash2 className="h-4 w-4" />
                     ביטול התור
-                  </button>
+                  </Button>
                 ) : (
                   <span />
                 )}
 
                 <div className="flex items-center gap-3">
-                  <button
-                    type="button"
-                    onClick={onClose}
-                    className="rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-border/40"
-                  >
+                  <Button variant="secondary" onClick={onClose}>
                     ביטול
-                  </button>
-                  <button
-                    type="submit"
-                    className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:opacity-90"
-                  >
-                    שמירה
-                  </button>
+                  </Button>
+                  <Button type="submit">שמירה</Button>
                 </div>
               </div>
             </form>

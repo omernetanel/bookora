@@ -1,17 +1,20 @@
 @theme {
-  /* Base surfaces */
-  --color-background: #0b0b12;
-  --color-card: #16161f;
-  --color-border: #2a2a38;
+  /* Base surfaces — neutral near-black, no blue/purple undertone on purpose
+     (a tinted dark background is what reads as "cosmic" instead of premium). */
+  --color-background: #0a0a0b;
+  --color-card: #161618;
+  --color-border: #28282b;
 
   /* Text */
   --color-foreground: #f7f7f8;
   --color-muted-foreground: #9797a8;
 
-  /* Brand */
-  --color-primary: #6366f1;
+  /* Brand — precise system blue, not purple. Purple was doing double duty
+     as both the accent and service-1, which is what made everything read
+     as one purple-tinted "galaxy" palette instead of a deliberate one. */
+  --color-primary: #0a84ff;
   --color-primary-foreground: #ffffff;
-  --color-ring: #6366f1;
+  --color-ring: #0a84ff;
 
   /* Status */
   --color-success: #22c55e;
@@ -21,9 +24,9 @@
   /* Appointment / service colors — fixed per service type, never random.
      Muted, low-saturation tones on purpose: they sit quietly on the dark
      background instead of shouting like stock bright palette colors. */
-  --color-service-1: #4c4a80;
+  --color-service-1: #3d5570;
   --color-service-2: #2f6b52;
-  --color-service-3: #3d5a85;
+  --color-service-3: #4a4a80;
   --color-service-4: #7d4468;
   --color-service-5: #83693f;
 

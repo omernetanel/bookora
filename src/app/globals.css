@@ -36,4 +36,16 @@
   button:not(:disabled):active {
     transform: scale(0.97);
   }
+
+  /* Very subtle depth on the base background — flat solid color read as
+     lifeless; a barely-visible light source gives glass/blur effects
+     something real to pick up instead of blurring a uniform color. */
+  body {
+    background-image: radial-gradient(
+      ellipse 70% 45% at 50% -10%,
+      rgb(255 255 255 / 0.05),
+      transparent
+    );
+    background-repeat: no-repeat;
+  }
 }

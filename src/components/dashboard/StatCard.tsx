@@ -9,7 +9,7 @@ type StatCardProps = {
 
 export function StatCard({ label, value, prefix, delta }: StatCardProps) {
   return (
-    <div className="rounded-xl border border-border bg-card p-6 shadow-card">
+    <div className="rounded-xl border border-white/10 bg-card/60 p-6 shadow-card backdrop-blur-md">
       <p className="text-sm text-muted-foreground">{label}</p>
       <div className="mt-2 flex items-baseline gap-2">
         <span dir="ltr" className="font-heading text-3xl font-bold text-foreground">
