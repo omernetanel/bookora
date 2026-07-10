@@ -209,29 +209,37 @@ export function DayCalendar() {
           if (staffIndex === -1) return null;
 
           const rowStartIndex = timeToRowStart(appointment.start, RANGE_START_HOUR) - 1;
-          const rowSpanIndex = durationToRowSpan(appointment.start, appointment.end) - 1;
+          const durationQuarters = durationToRowSpan(appointment.start, appointment.end);
+          const rowSpanIndex = durationQuarters - 1;
+          const hasRoomForService = durationQuarters >= 3;
 
           return (
             <div
               key={appointment.id}
-              className={`${GRID_ROW_START[rowStartIndex]} ${GRID_ROW_SPAN[rowSpanIndex]} ${STAFF_COL_START[staffIndex]} relative mx-0.5 overflow-hidden rounded-lg p-2 ${SERVICE_BG[appointment.color]} ${STATUS_CLASSES[appointment.status]}`}
+              className={`${GRID_ROW_START[rowStartIndex]} ${GRID_ROW_SPAN[rowSpanIndex]} ${STAFF_COL_START[staffIndex]} relative mx-0.5 overflow-hidden rounded-xl shadow-sm ring-1 ring-white/15 ${SERVICE_BG[appointment.color]} ${STATUS_CLASSES[appointment.status]}`}
             >
-              {appointment.status === "completed" ? (
-                <CheckCircle2 className="absolute end-1.5 top-1.5 h-3.5 w-3.5 text-primary-foreground/90" />
-              ) : null}
-              <p className="text-xs text-primary-foreground/80">
-                {appointment.start}
-              </p>
-              <p
-                className={`truncate text-sm font-semibold text-primary-foreground ${
-                  appointment.status === "cancelled" ? "line-through" : ""
-                }`}
-              >
-                {appointment.clientName}
-              </p>
-              <p className="truncate text-xs text-primary-foreground/80">
-                {appointment.serviceName}
-              </p>
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/20 via-white/0 to-black/10" />
+
+              <div className="relative flex h-full flex-col justify-center gap-px px-2.5 py-1">
+                {appointment.status === "completed" ? (
+                  <CheckCircle2 className="absolute end-1 top-1 h-3.5 w-3.5 text-primary-foreground/90" />
+                ) : null}
+                <p className="text-[11px] font-medium leading-tight text-primary-foreground/80">
+                  {appointment.start}
+                </p>
+                <p
+                  className={`truncate text-sm font-bold leading-tight text-primary-foreground ${
+                    appointment.status === "cancelled" ? "line-through" : ""
+                  }`}
+                >
+                  {appointment.clientName}
+                </p>
+                {hasRoomForService ? (
+                  <p className="truncate text-[11px] leading-tight text-primary-foreground/80">
+                    {appointment.serviceName}
+                  </p>
+                ) : null}
+              </div>
             </div>
           );
         })}
