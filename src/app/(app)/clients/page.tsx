@@ -52,7 +52,7 @@ export default function ClientsPage() {
                         {client.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary"
+                            className="rounded-full bg-border px-2.5 py-1 text-xs font-medium text-foreground"
                           >
                             {tag}
                           </span>

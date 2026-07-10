@@ -35,8 +35,8 @@ export function TopBar({ title, subtitle }: TopBarProps) {
           <span className="absolute end-2 top-2 h-2 w-2 rounded-full bg-destructive" />
         </button>
 
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary">
-          <span className="font-heading text-sm font-bold text-primary-foreground">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card">
+          <span className="font-heading text-sm font-bold text-foreground">
             א
           </span>
         </div>

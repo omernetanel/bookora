@@ -84,7 +84,7 @@ export function AppointmentModal({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
             onClick={onClose}
-            className="absolute inset-0 bg-background/80"
+            className="absolute inset-0 bg-background/70 backdrop-blur-sm"
           />
 
           <motion.div
