@@ -1,5 +1,7 @@
-import { Fragment } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+"use client";
+
+import { Fragment, useEffect, useState } from "react";
+import { ChevronLeft, ChevronRight, CheckCircle2 } from "lucide-react";
 import {
   GRID_ROW_START,
   GRID_ROW_SPAN,
@@ -11,7 +13,12 @@ import {
 const RANGE_START_HOUR = 9;
 const HOURS = [9, 10, 11, 12, 13, 14, 15, 16] as const;
 
-type ServiceColor = "service-1" | "service-2" | "service-3" | "service-4" | "service-5";
+type ServiceColor =
+  | "service-1"
+  | "service-2"
+  | "service-3"
+  | "service-4"
+  | "service-5";
 
 const SERVICE_BG: Record<ServiceColor, string> = {
   "service-1": "bg-service-1",
@@ -21,6 +28,30 @@ const SERVICE_BG: Record<ServiceColor, string> = {
   "service-5": "bg-service-5",
 };
 
+type AppointmentStatus = "confirmed" | "pending" | "cancelled" | "completed";
+
+const STATUS_CLASSES: Record<AppointmentStatus, string> = {
+  confirmed: "",
+  pending: "border-2 border-dashed border-foreground/40 opacity-80",
+  cancelled: "opacity-35 grayscale",
+  completed: "",
+};
+
+type StaffMember = {
+  id: string;
+  name: string;
+};
+
+const staffMembers: StaffMember[] = [
+  { id: "s1", name: "אור כהן" },
+  { id: "s2", name: "מיכל לוי" },
+  { id: "s3", name: "דניאל אברהם" },
+];
+
+// Fixed to 3 staff for now — the grid column template below is static on
+// purpose, so it stays a discoverable literal for Tailwind's build scanner.
+const STAFF_COL_START = ["col-start-2", "col-start-3", "col-start-4"] as const;
+
 type DayAppointment = {
   id: string;
   clientName: string;
@@ -28,17 +59,45 @@ type DayAppointment = {
   start: string;
   end: string;
   color: ServiceColor;
+  staffId: string;
+  status: AppointmentStatus;
 };
 
 const appointments: DayAppointment[] = [
-  { id: "1", clientName: "שרה לוי", serviceName: "תספורת", start: "09:00", end: "09:45", color: "service-1" },
-  { id: "2", clientName: "מיכל כהן", serviceName: "ייעוץ", start: "10:00", end: "10:45", color: "service-3" },
-  { id: "3", clientName: "דוד לוי", serviceName: "קיצוץ זקן", start: "11:00", end: "11:30", color: "service-2" },
-  { id: "4", clientName: "אמה ישראלי", serviceName: "צביעה", start: "12:00", end: "13:00", color: "service-4" },
-  { id: "5", clientName: "אולגה פרץ", serviceName: "תספורת", start: "14:00", end: "14:45", color: "service-1" },
+  { id: "1", clientName: "שרה לוי", serviceName: "תספורת", start: "09:00", end: "09:45", color: "service-1", staffId: "s1", status: "confirmed" },
+  { id: "2", clientName: "מיכל כהן", serviceName: "ייעוץ", start: "10:00", end: "10:45", color: "service-3", staffId: "s2", status: "confirmed" },
+  { id: "3", clientName: "דוד לוי", serviceName: "קיצוץ זקן", start: "11:00", end: "11:30", color: "service-2", staffId: "s1", status: "pending" },
+  { id: "4", clientName: "אמה ישראלי", serviceName: "צביעה", start: "12:00", end: "13:00", color: "service-4", staffId: "s3", status: "confirmed" },
+  { id: "5", clientName: "אולגה פרץ", serviceName: "תספורת", start: "14:00", end: "14:45", color: "service-1", staffId: "s2", status: "cancelled" },
+  { id: "6", clientName: "יוסי מזרחי", serviceName: "עיסוי", start: "10:30", end: "11:15", color: "service-5", staffId: "s3", status: "completed" },
 ];
 
+function useNowRowStart(): number | null {
+  const [nowRowStart, setNowRowStart] = useState<number | null>(null);
+
+  useEffect(() => {
+    function update() {
+      const now = new Date();
+      const hours = now.getHours();
+      if (hours < RANGE_START_HOUR || hours >= RANGE_START_HOUR + HOURS.length) {
+        setNowRowStart(null);
+        return;
+      }
+      const time = `${String(hours).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+      setNowRowStart(timeToRowStart(time, RANGE_START_HOUR));
+    }
+
+    update();
+    const interval = setInterval(update, 60_000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return nowRowStart;
+}
+
 export function DayCalendar() {
+  const nowRowStart = useNowRowStart();
+
   return (
     <section className="rounded-xl border border-border bg-card p-6 shadow-card">
       <div className="mb-6 flex items-center justify-between">
@@ -91,7 +150,21 @@ export function DayCalendar() {
         </div>
       </div>
 
-      <div className="grid grid-cols-[3.5rem_1fr] grid-rows-[repeat(32,1.25rem)]">
+      <div className="grid grid-cols-[3.5rem_repeat(3,1fr)] gap-x-2">
+        <div />
+        {staffMembers.map((member) => (
+          <div key={member.id} className="flex items-center gap-2 px-1 pb-3">
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border bg-background text-xs font-semibold text-foreground">
+              {member.name.charAt(0)}
+            </div>
+            <span className="truncate text-sm font-medium text-foreground">
+              {member.name}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      <div className="relative grid grid-cols-[3.5rem_repeat(3,1fr)] grid-rows-[repeat(32,1.25rem)] gap-x-2">
         {HOURS.map((hour, index) => {
           const rowStart = GRID_ROW_START[index * QUARTERS_PER_HOUR];
           return (
@@ -101,27 +174,41 @@ export function DayCalendar() {
               >
                 {hour}:00
               </div>
-              <div
-                className={`${rowStart} row-span-4 col-start-2 border-t border-border`}
-              />
+              {STAFF_COL_START.map((colStart) => (
+                <div
+                  key={`${hour}-${colStart}`}
+                  className={`${rowStart} row-span-4 ${colStart} border-t border-border`}
+                />
+              ))}
             </Fragment>
           );
         })}
 
         {appointments.map((appointment) => {
+          const staffIndex = staffMembers.findIndex(
+            (member) => member.id === appointment.staffId,
+          );
+          if (staffIndex === -1) return null;
+
           const rowStartIndex = timeToRowStart(appointment.start, RANGE_START_HOUR) - 1;
-          const rowSpanIndex =
-            durationToRowSpan(appointment.start, appointment.end) - 1;
+          const rowSpanIndex = durationToRowSpan(appointment.start, appointment.end) - 1;
 
           return (
             <div
               key={appointment.id}
-              className={`${GRID_ROW_START[rowStartIndex]} ${GRID_ROW_SPAN[rowSpanIndex]} col-start-2 mx-1 overflow-hidden rounded-lg p-2 ${SERVICE_BG[appointment.color]}`}
+              className={`${GRID_ROW_START[rowStartIndex]} ${GRID_ROW_SPAN[rowSpanIndex]} ${STAFF_COL_START[staffIndex]} relative mx-0.5 overflow-hidden rounded-lg p-2 ${SERVICE_BG[appointment.color]} ${STATUS_CLASSES[appointment.status]}`}
             >
+              {appointment.status === "completed" ? (
+                <CheckCircle2 className="absolute end-1.5 top-1.5 h-3.5 w-3.5 text-primary-foreground/90" />
+              ) : null}
               <p className="text-xs text-primary-foreground/80">
                 {appointment.start}
               </p>
-              <p className="truncate text-sm font-semibold text-primary-foreground">
+              <p
+                className={`truncate text-sm font-semibold text-primary-foreground ${
+                  appointment.status === "cancelled" ? "line-through" : ""
+                }`}
+              >
                 {appointment.clientName}
               </p>
               <p className="truncate text-xs text-primary-foreground/80">
@@ -130,6 +217,15 @@ export function DayCalendar() {
             </div>
           );
         })}
+
+        {nowRowStart ? (
+          <div
+            className={`${GRID_ROW_START[nowRowStart - 1]} col-start-2 col-span-3 z-10 flex items-center`}
+          >
+            <span className="h-2 w-2 shrink-0 rounded-full bg-destructive" />
+            <span className="h-px flex-1 bg-destructive" />
+          </div>
+        ) : null}
       </div>
     </section>
   );
