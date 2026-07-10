@@ -163,6 +163,25 @@ export function DayCalendar() {
         </div>
       </div>
 
+      <div className="mb-4 flex items-center gap-4 text-xs text-muted-foreground">
+        <span className="flex items-center gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-full bg-foreground/50" />
+          מאושר
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-full border-2 border-dashed border-foreground/50" />
+          ממתין
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-full bg-foreground/20" />
+          בוטל
+        </span>
+        <span className="flex items-center gap-1.5">
+          <CheckCircle2 className="h-3 w-3 text-foreground/50" />
+          הושלם
+        </span>
+      </div>
+
       <NewAppointmentModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
