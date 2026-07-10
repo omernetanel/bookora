@@ -1,65 +1,97 @@
-import Image from "next/image";
+const colorTokens = [
+  { name: "background", className: "bg-background" },
+  { name: "card", className: "bg-card" },
+  { name: "border", className: "bg-border" },
+  { name: "primary", className: "bg-primary" },
+  { name: "success", className: "bg-success" },
+  { name: "warning", className: "bg-warning" },
+  { name: "destructive", className: "bg-destructive" },
+] as const;
+
+const serviceTokens = [
+  { name: "service-1", className: "bg-service-1" },
+  { name: "service-2", className: "bg-service-2" },
+  { name: "service-3", className: "bg-service-3" },
+  { name: "service-4", className: "bg-service-4" },
+  { name: "service-5", className: "bg-service-5" },
+] as const;
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="flex flex-1 flex-col gap-12 p-12">
+      <header>
+        <h1 className="font-heading text-3xl font-bold text-foreground">
+          Bookora — בדיקת Design Tokens
+        </h1>
+        <p className="mt-2 text-muted-foreground">
+          עמוד זמני לאימות חזותי של הטוקנים. יימחק לפני בניית הדאשבורד האמיתי.
+        </p>
+      </header>
+
+      <section>
+        <h2 className="mb-4 font-heading text-xl font-semibold text-foreground">
+          צבעי בסיס
+        </h2>
+        <div className="flex flex-wrap gap-4">
+          {colorTokens.map((token) => (
+            <div key={token.name} className="flex flex-col items-center gap-2">
+              <div
+                className={`h-16 w-16 rounded-lg border border-border ${token.className}`}
+              />
+              <span className="text-sm text-muted-foreground">{token.name}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h2 className="mb-4 font-heading text-xl font-semibold text-foreground">
+          צבעי שירות (Appointment Cards)
+        </h2>
+        <div className="flex flex-wrap gap-4">
+          {serviceTokens.map((token) => (
+            <div key={token.name} className="flex flex-col items-center gap-2">
+              <div className={`h-16 w-16 rounded-lg ${token.className}`} />
+              <span className="text-sm text-muted-foreground">{token.name}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h2 className="mb-4 font-heading text-xl font-semibold text-foreground">
+          פונטים
+        </h2>
+        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-6 shadow-card">
+          <p className="font-heading text-2xl font-bold text-foreground">
+            Google Sans — כותרת לדוגמה 12:30, ₪2,450
+          </p>
+          <p className="font-heading text-2xl italic font-bold text-foreground">
+            Google Sans Italic — לדוגמה
+          </p>
+          <p className="font-sans text-base text-foreground">
+            Assistant — טקסט גוף רגיל לדוגמה. תור הבא ב-09:00 עם שרה לוי, תספורת,
+            מחיר ₪120.
+          </p>
+          <p className="font-sans text-base font-semibold text-foreground">
+            Assistant Semibold — טקסט מודגש לדוגמה.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      <section>
+        <h2 className="mb-4 font-heading text-xl font-semibold text-foreground">
+          Shadow ו-Radius
+        </h2>
+        <div className="flex gap-6">
+          <div className="flex h-24 w-40 items-center justify-center rounded-lg bg-card shadow-sm">
+            <span className="text-sm text-muted-foreground">shadow-sm</span>
+          </div>
+          <div className="flex h-24 w-40 items-center justify-center rounded-xl bg-card shadow-card">
+            <span className="text-sm text-muted-foreground">shadow-card</span>
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+    </main>
   );
 }

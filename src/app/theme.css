@@ -1,0 +1,40 @@
+@theme {
+  /* Base surfaces */
+  --color-background: #0b0b12;
+  --color-card: #16161f;
+  --color-border: #2a2a38;
+
+  /* Text */
+  --color-foreground: #f7f7f8;
+  --color-muted-foreground: #9797a8;
+
+  /* Brand */
+  --color-primary: #6366f1;
+  --color-primary-foreground: #ffffff;
+  --color-ring: #6366f1;
+
+  /* Status */
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-destructive: #ef4444;
+
+  /* Appointment / service colors — fixed per service type, never random */
+  --color-service-1: #6366f1;
+  --color-service-2: #15803d;
+  --color-service-3: #2563eb;
+  --color-service-4: #db2777;
+  --color-service-5: #d97706;
+
+  /* Fonts */
+  --font-sans: var(--font-assistant);
+  --font-heading: var(--font-google-sans);
+
+  /* Shadows — soft elevation only, never colored/glow */
+  --shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.4), 0 8px 24px -8px rgb(0 0 0 / 0.45);
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+
+  /* Radius */
+  --radius-sm: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+}
