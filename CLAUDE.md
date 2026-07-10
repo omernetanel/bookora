@@ -43,9 +43,34 @@ follow them, no exceptions, no "just this once."
 
 ## Code quality
 - After every edit: re-review the code that was written/changed until it's
-  clean, correct, and professional — not just "it works." Repeat this on
-  every change, not only at the end.
+  clean, correct, secure, and professional — not just "it works." Repeat
+  this on every change, not only at the end.
 - No premature abstractions, no dead code, no half-finished TODOs.
+
+## Lessons learned (real bugs hit in this project — do not repeat)
+- **RTL + numbers/symbols can visually reverse.** A string mixing Hebrew
+  text or symbols (`+`, `-`, `%`, `–`) with digits in one text node can
+  bidi-reorder incorrectly (e.g. `+12.5%` rendering as `12.5%+`, or
+  `09:00–17:00` rendering backwards). Isolate the numeric/symbol part in
+  its own element with `dir="ltr"` when this happens, and verify visually
+  — never assume it renders correctly.
+- **Tailwind class names must be complete literal strings in the source.**
+  The build-time scanner cannot see dynamically-built class names (e.g.
+  `` `row-start-${n}` ``) — it needs the full string to exist literally
+  somewhere in the file. For data-driven layout (e.g. positioning items on
+  a grid by time), precompute a lookup array/object of literal class name
+  strings instead.
+- **`flex-col` cross-axis alignment is not reliably RTL-aware.** An element
+  relying on the default/`items-start` alignment inside a `flex-col`
+  container can ignore `dir="rtl"` and stick to the physical left. A
+  `flex` row wrapper (`justify-content`) has been reliable for RTL
+  throughout this project — prefer it over column cross-axis alignment
+  when RTL-correct positioning matters.
+- **Use `h-dvh`, not `min-h-full`, for full-viewport app-shell layouts.**
+  A fixed-sidebar + scrollable-content layout needs a definite height
+  at the root to work — `min-height` doesn't reliably give flex children
+  a definite size to grow into, which left the sidebar only as tall as
+  the page content on short pages.
 
 ## Scroll / animation architecture (lessons from past projects — do not repeat)
 - **No `zoom` on a wrapper** — it breaks `scroll`, `getBoundingClientRect`,
