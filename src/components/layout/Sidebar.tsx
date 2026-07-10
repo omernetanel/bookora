@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion } from "framer-motion";
 import {
   LayoutDashboard,
   Calendar,
@@ -48,14 +49,21 @@ export function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+              className={`relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                 isActive
-                  ? "bg-primary/10 text-primary"
+                  ? "text-primary"
                   : "text-muted-foreground hover:bg-border/40 hover:text-foreground"
               }`}
             >
-              <Icon className="h-5 w-5 shrink-0" />
-              {item.label}
+              {isActive ? (
+                <motion.div
+                  layoutId="sidebar-active-highlight"
+                  className="absolute inset-0 rounded-lg bg-primary/10"
+                  transition={{ type: "spring", stiffness: 500, damping: 35 }}
+                />
+              ) : null}
+              <Icon className="relative h-5 w-5 shrink-0" />
+              <span className="relative">{item.label}</span>
             </Link>
           );
         })}

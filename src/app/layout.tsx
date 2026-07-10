@@ -18,7 +18,7 @@ export default function RootLayout({
       dir="rtl"
       className={`${assistant.variable} ${googleSans.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-background font-sans text-foreground">
+      <body className="flex h-dvh flex-col bg-background font-sans text-foreground">
         {children}
       </body>
     </html>

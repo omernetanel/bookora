@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment, useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight, CheckCircle2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, CheckCircle2, Plus } from "lucide-react";
 import {
   GRID_ROW_START,
   GRID_ROW_SPAN,
@@ -9,6 +9,7 @@ import {
   durationToRowSpan,
   timeToRowStart,
 } from "@/lib/calendar-grid";
+import { NewAppointmentModal } from "./NewAppointmentModal";
 
 const RANGE_START_HOUR = 9;
 const HOURS = [9, 10, 11, 12, 13, 14, 15, 16] as const;
@@ -97,6 +98,7 @@ function useNowRowStart(): number | null {
 
 export function DayCalendar() {
   const nowRowStart = useNowRowStart();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <section className="rounded-xl border border-border bg-card p-6 shadow-card">
@@ -105,50 +107,66 @@ export function DayCalendar() {
           14 במאי, 2026
         </h2>
 
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            aria-label="היום הקודם"
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:bg-border/40"
-          >
-            <ChevronRight className="h-4 w-4" />
-          </button>
-          <button
-            type="button"
-            className="rounded-lg border border-border px-3 py-1.5 text-sm text-foreground transition-colors hover:bg-border/40"
-          >
-            היום
-          </button>
-          <button
-            type="button"
-            aria-label="היום הבא"
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:bg-border/40"
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </button>
-        </div>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              aria-label="היום הקודם"
+              className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:bg-border/40"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              className="rounded-lg border border-border px-3 py-1.5 text-sm text-foreground transition-colors hover:bg-border/40"
+            >
+              היום
+            </button>
+            <button
+              type="button"
+              aria-label="היום הבא"
+              className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:bg-border/40"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+          </div>
 
-        <div className="flex items-center gap-1 rounded-lg border border-border p-1">
+          <div className="flex items-center gap-1 rounded-lg border border-border p-1">
+            <button
+              type="button"
+              className="rounded-md bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary"
+            >
+              יום
+            </button>
+            <button
+              type="button"
+              className="rounded-md px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              שבוע
+            </button>
+            <button
+              type="button"
+              className="rounded-md px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              חודש
+            </button>
+          </div>
+
           <button
             type="button"
-            className="rounded-md bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary"
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-colors hover:opacity-90"
           >
-            יום
-          </button>
-          <button
-            type="button"
-            className="rounded-md px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            שבוע
-          </button>
-          <button
-            type="button"
-            className="rounded-md px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
-          >
-            חודש
+            <Plus className="h-4 w-4" />
+            תור חדש
           </button>
         </div>
       </div>
+
+      <NewAppointmentModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
 
       <div className="grid grid-cols-[3.5rem_repeat(3,1fr)] gap-x-2">
         <div />
