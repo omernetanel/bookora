@@ -25,3 +25,15 @@
 *::-webkit-scrollbar-thumb:hover {
   background-color: var(--color-muted-foreground);
 }
+
+/* Consistent press feedback on every button in the app, applied once
+   globally instead of repeating it on each button's className. */
+@layer base {
+  button:not(:disabled) {
+    transition: transform 0.1s ease;
+  }
+
+  button:not(:disabled):active {
+    transform: scale(0.97);
+  }
+}

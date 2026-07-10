@@ -1,19 +1,19 @@
+import { AnimatedNumber } from "./AnimatedNumber";
+
 type StatCardProps = {
   label: string;
-  value: string;
+  value: number;
+  prefix?: string;
   delta?: string;
 };
 
-export function StatCard({ label, value, delta }: StatCardProps) {
+export function StatCard({ label, value, prefix, delta }: StatCardProps) {
   return (
     <div className="rounded-xl border border-border bg-card p-6 shadow-card">
       <p className="text-sm text-muted-foreground">{label}</p>
       <div className="mt-2 flex items-baseline gap-2">
-        <span
-          dir="ltr"
-          className="font-heading text-3xl font-bold text-foreground"
-        >
-          {value}
+        <span dir="ltr" className="font-heading text-3xl font-bold text-foreground">
+          <AnimatedNumber value={value} prefix={prefix} />
         </span>
         {delta ? (
           <span dir="ltr" className="text-sm font-medium text-success">
