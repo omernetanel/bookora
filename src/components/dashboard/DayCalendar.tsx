@@ -9,17 +9,22 @@ import {
   durationToRowSpan,
   timeToRowStart,
 } from "@/lib/calendar-grid";
-import { NewAppointmentModal } from "./NewAppointmentModal";
+import {
+  addMinutesToTime,
+  findConflict,
+  initialAppointments,
+  services,
+  staffMembers,
+  type DayAppointment,
+  type ServiceColor,
+} from "@/lib/mock-schedule";
+import {
+  AppointmentModal,
+  type AppointmentFormValues,
+} from "./AppointmentModal";
 
 const RANGE_START_HOUR = 9;
 const HOURS = [9, 10, 11, 12, 13, 14, 15, 16] as const;
-
-type ServiceColor =
-  | "service-1"
-  | "service-2"
-  | "service-3"
-  | "service-4"
-  | "service-5";
 
 const SERVICE_BG: Record<ServiceColor, string> = {
   "service-1": "bg-service-1",
@@ -29,49 +34,16 @@ const SERVICE_BG: Record<ServiceColor, string> = {
   "service-5": "bg-service-5",
 };
 
-type AppointmentStatus = "confirmed" | "pending" | "cancelled" | "completed";
-
-const STATUS_CLASSES: Record<AppointmentStatus, string> = {
+const STATUS_CLASSES: Record<DayAppointment["status"], string> = {
   confirmed: "",
   pending: "border-2 border-dashed border-foreground/40 opacity-80",
   cancelled: "opacity-35 grayscale",
   completed: "",
 };
 
-type StaffMember = {
-  id: string;
-  name: string;
-};
-
-const staffMembers: StaffMember[] = [
-  { id: "s1", name: "אור כהן" },
-  { id: "s2", name: "מיכל לוי" },
-  { id: "s3", name: "דניאל אברהם" },
-];
-
 // Fixed to 3 staff for now — the grid column template below is static on
 // purpose, so it stays a discoverable literal for Tailwind's build scanner.
 const STAFF_COL_START = ["col-start-2", "col-start-3", "col-start-4"] as const;
-
-type DayAppointment = {
-  id: string;
-  clientName: string;
-  serviceName: string;
-  start: string;
-  end: string;
-  color: ServiceColor;
-  staffId: string;
-  status: AppointmentStatus;
-};
-
-const appointments: DayAppointment[] = [
-  { id: "1", clientName: "שרה לוי", serviceName: "תספורת", start: "09:00", end: "09:45", color: "service-1", staffId: "s1", status: "confirmed" },
-  { id: "2", clientName: "מיכל כהן", serviceName: "ייעוץ", start: "10:00", end: "10:45", color: "service-3", staffId: "s2", status: "confirmed" },
-  { id: "3", clientName: "דוד לוי", serviceName: "קיצוץ זקן", start: "11:00", end: "11:30", color: "service-2", staffId: "s1", status: "pending" },
-  { id: "4", clientName: "אמה ישראלי", serviceName: "צביעה", start: "12:00", end: "13:00", color: "service-4", staffId: "s3", status: "confirmed" },
-  { id: "5", clientName: "אולגה פרץ", serviceName: "תספורת", start: "14:00", end: "14:45", color: "service-1", staffId: "s2", status: "cancelled" },
-  { id: "6", clientName: "יוסי מזרחי", serviceName: "עיסוי", start: "10:30", end: "11:15", color: "service-5", staffId: "s3", status: "completed" },
-];
 
 function useNowRowStart(): number | null {
   const [nowRowStart, setNowRowStart] = useState<number | null>(null);
@@ -98,7 +70,69 @@ function useNowRowStart(): number | null {
 
 export function DayCalendar() {
   const nowRowStart = useNowRowStart();
+  const [appointments, setAppointments] = useState<DayAppointment[]>(initialAppointments);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingAppointment, setEditingAppointment] = useState<DayAppointment | null>(null);
+  const [modalSession, setModalSession] = useState(0);
+
+  function openCreateModal() {
+    setEditingAppointment(null);
+    setIsModalOpen(true);
+    setModalSession((session) => session + 1);
+  }
+
+  function openEditModal(appointment: DayAppointment) {
+    setEditingAppointment(appointment);
+    setIsModalOpen(true);
+    setModalSession((session) => session + 1);
+  }
+
+  function handleSave(values: AppointmentFormValues, editingId: string | null): string | null {
+    const service = services[values.serviceIndex];
+    const end = addMinutesToTime(values.start, service.durationMinutes);
+    const conflict = findConflict(
+      appointments,
+      values.staffId,
+      values.start,
+      end,
+      editingId ?? undefined,
+    );
+
+    if (conflict) {
+      const staffName =
+        staffMembers.find((member) => member.id === values.staffId)?.name ?? "";
+      return `השעה הזו כבר תפוסה אצל ${staffName} — ${conflict.clientName} (${conflict.start}–${conflict.end})`;
+    }
+
+    const updated: DayAppointment = {
+      id: editingId ?? crypto.randomUUID(),
+      clientName: values.clientName,
+      serviceName: service.name,
+      color: service.color,
+      staffId: values.staffId,
+      start: values.start,
+      end,
+      status: editingId
+        ? appointments.find((appointment) => appointment.id === editingId)?.status ?? "confirmed"
+        : "confirmed",
+    };
+
+    setAppointments((current) =>
+      editingId
+        ? current.map((appointment) => (appointment.id === editingId ? updated : appointment))
+        : [...current, updated],
+    );
+
+    return null;
+  }
+
+  function handleCancelAppointment(id: string) {
+    setAppointments((current) =>
+      current.map((appointment) =>
+        appointment.id === id ? { ...appointment, status: "cancelled" } : appointment,
+      ),
+    );
+  }
 
   return (
     <section className="rounded-xl border border-border bg-card p-6 shadow-card">
@@ -154,7 +188,7 @@ export function DayCalendar() {
 
           <button
             type="button"
-            onClick={() => setIsModalOpen(true)}
+            onClick={openCreateModal}
             className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-colors hover:opacity-90"
           >
             <Plus className="h-4 w-4" />
@@ -182,9 +216,13 @@ export function DayCalendar() {
         </span>
       </div>
 
-      <NewAppointmentModal
+      <AppointmentModal
+        key={modalSession}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        editingAppointment={editingAppointment}
+        onSave={handleSave}
+        onCancelAppointment={handleCancelAppointment}
       />
 
       <div className="grid grid-cols-[3.5rem_repeat(3,1fr)] gap-x-2">
@@ -233,9 +271,11 @@ export function DayCalendar() {
           const hasRoomForService = durationQuarters >= 3;
 
           return (
-            <div
+            <button
               key={appointment.id}
-              className={`${GRID_ROW_START[rowStartIndex]} ${GRID_ROW_SPAN[rowSpanIndex]} ${STAFF_COL_START[staffIndex]} relative mx-0.5 overflow-hidden rounded-xl shadow-sm ring-1 ring-white/10 ${SERVICE_BG[appointment.color]} ${STATUS_CLASSES[appointment.status]}`}
+              type="button"
+              onClick={() => openEditModal(appointment)}
+              className={`${GRID_ROW_START[rowStartIndex]} ${GRID_ROW_SPAN[rowSpanIndex]} ${STAFF_COL_START[staffIndex]} relative mx-0.5 overflow-hidden rounded-xl text-start shadow-sm ring-1 ring-white/10 transition-transform hover:scale-[1.02] ${SERVICE_BG[appointment.color]} ${STATUS_CLASSES[appointment.status]}`}
             >
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/10 via-white/0 to-black/10" />
 
@@ -259,7 +299,7 @@ export function DayCalendar() {
                   </p>
                 ) : null}
               </div>
-            </div>
+            </button>
           );
         })}
 

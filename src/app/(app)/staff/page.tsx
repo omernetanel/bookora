@@ -1,19 +1,6 @@
 import { TopBar } from "@/components/layout/TopBar";
 import { Card } from "@/components/ui/Card";
-
-type StaffMember = {
-  id: string;
-  name: string;
-  role: string;
-  workingDays: string;
-  workingHours: string;
-};
-
-const staffMembers: StaffMember[] = [
-  { id: "s1", name: "אור כהן", role: "ספר בכיר", workingDays: "א׳–ה׳", workingHours: "09:00–17:00" },
-  { id: "s2", name: "מיכל לוי", role: "יועצת", workingDays: "א׳–ד׳", workingHours: "10:00–18:00" },
-  { id: "s3", name: "דניאל אברהם", role: "מעצב שיער", workingDays: "ב׳–ו׳", workingHours: "09:00–15:00" },
-];
+import { staffMembers } from "@/lib/mock-schedule";
 
 export default function StaffPage() {
   return (
