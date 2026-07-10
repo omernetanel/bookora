@@ -37,6 +37,9 @@ follow them, no exceptions, no "just this once."
 - After every visual change: show/describe the result (screenshot) before
   moving on — never adopt a solution without seeing it work.
 - REWIND is a legitimate tool for going back — don't hesitate to use it.
+- If, during work, a rule in this file seems like it should change (update,
+  add, or remove something) — propose it explicitly and wait for the user's
+  decision. Never edit this file silently.
 
 ## Code quality
 - After every edit: re-review the code that was written/changed until it's
