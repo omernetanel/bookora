@@ -18,12 +18,14 @@
   --color-warning: #f59e0b;
   --color-destructive: #ef4444;
 
-  /* Appointment / service colors — fixed per service type, never random */
-  --color-service-1: #6366f1;
-  --color-service-2: #15803d;
-  --color-service-3: #2563eb;
-  --color-service-4: #db2777;
-  --color-service-5: #d97706;
+  /* Appointment / service colors — fixed per service type, never random.
+     Muted, low-saturation tones on purpose: they sit quietly on the dark
+     background instead of shouting like stock bright palette colors. */
+  --color-service-1: #4c4a80;
+  --color-service-2: #2f6b52;
+  --color-service-3: #3d5a85;
+  --color-service-4: #7d4468;
+  --color-service-5: #83693f;
 
   /* Fonts */
   --font-sans: var(--font-assistant);
