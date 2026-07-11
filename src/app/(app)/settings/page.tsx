@@ -2,7 +2,7 @@ import { TopBar } from "@/components/layout/TopBar";
 import { Card } from "@/components/ui/Card";
 
 const businessFields = [
-  { label: "שם העסק", value: "Bookora Salon" },
+  { label: "שם העסק", value: "LYNKO ייעוץ עסקי" },
   { label: "טלפון", value: "03-1234567" },
   { label: "כתובת", value: "רוטשילד 1, תל אביב" },
 ];

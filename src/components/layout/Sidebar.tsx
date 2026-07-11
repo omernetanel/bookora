@@ -32,11 +32,11 @@ export function Sidebar() {
       <div className="flex items-center gap-3 px-6 py-6">
         <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
           <span className="font-heading text-lg font-bold text-primary-foreground">
-            B
+            L
           </span>
         </div>
         <span className="font-heading text-xl font-bold text-foreground">
-          Bookora
+          LYNKO
         </span>
       </div>
 

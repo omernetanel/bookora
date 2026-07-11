@@ -13,14 +13,14 @@ type AppointmentRow = {
 };
 
 const appointments: AppointmentRow[] = [
-  { id: "1", clientName: "שרה לוי", serviceName: "תספורת", staffName: "אור כהן", date: "14 במאי", time: "09:00", status: "confirmed" },
-  { id: "2", clientName: "מיכל כהן", serviceName: "ייעוץ", staffName: "מיכל לוי", date: "14 במאי", time: "10:00", status: "confirmed" },
-  { id: "3", clientName: "דוד לוי", serviceName: "קיצוץ זקן", staffName: "אור כהן", date: "14 במאי", time: "11:00", status: "pending" },
-  { id: "4", clientName: "אמה ישראלי", serviceName: "צביעה", staffName: "דניאל אברהם", date: "14 במאי", time: "12:00", status: "confirmed" },
-  { id: "5", clientName: "אולגה פרץ", serviceName: "תספורת", staffName: "מיכל לוי", date: "14 במאי", time: "14:00", status: "cancelled" },
-  { id: "6", clientName: "יוסי מזרחי", serviceName: "עיסוי", staffName: "דניאל אברהם", date: "14 במאי", time: "10:30", status: "completed" },
-  { id: "7", clientName: "רותם שגיא", serviceName: "תספורת", staffName: "אור כהן", date: "15 במאי", time: "09:30", status: "confirmed" },
-  { id: "8", clientName: "נועה בר", serviceName: "ייעוץ", staffName: "מיכל לוי", date: "15 במאי", time: "11:00", status: "pending" },
+  { id: "1", clientName: "שרה לוי", serviceName: "ייעוץ ראשוני", staffName: "אור כהן", date: "14 במאי", time: "09:00", status: "confirmed" },
+  { id: "2", clientName: "מיכל כהן", serviceName: "עריכת חוזה", staffName: "מיכל לוי", date: "14 במאי", time: "10:00", status: "confirmed" },
+  { id: "3", clientName: "דוד לוי", serviceName: "ייעוץ מס", staffName: "אור כהן", date: "14 במאי", time: "11:00", status: "pending" },
+  { id: "4", clientName: "אמה ישראלי", serviceName: "בדיקת נאותות", staffName: "דניאל אברהם", date: "14 במאי", time: "12:00", status: "confirmed" },
+  { id: "5", clientName: "אולגה פרץ", serviceName: "ייעוץ ראשוני", staffName: "מיכל לוי", date: "14 במאי", time: "14:00", status: "cancelled" },
+  { id: "6", clientName: "יוסי מזרחי", serviceName: "ליווי משפטי", staffName: "דניאל אברהם", date: "14 במאי", time: "10:30", status: "completed" },
+  { id: "7", clientName: "רותם שגיא", serviceName: "ייעוץ ראשוני", staffName: "אור כהן", date: "15 במאי", time: "09:30", status: "confirmed" },
+  { id: "8", clientName: "נועה בר", serviceName: "עריכת חוזה", staffName: "מיכל לוי", date: "15 במאי", time: "11:00", status: "pending" },
 ];
 
 export default function AppointmentsPage() {

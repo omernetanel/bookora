@@ -16,9 +16,9 @@ export type StaffMember = {
 };
 
 export const staffMembers: StaffMember[] = [
-  { id: "s1", name: "אור כהן", role: "ספר בכיר", workingDays: "א׳–ה׳", workingHours: "09:00–17:00" },
-  { id: "s2", name: "מיכל לוי", role: "יועצת", workingDays: "א׳–ד׳", workingHours: "10:00–18:00" },
-  { id: "s3", name: "דניאל אברהם", role: "מעצב שיער", workingDays: "ב׳–ו׳", workingHours: "09:00–15:00" },
+  { id: "s1", name: "אור כהן", role: "עו״ד בכיר", workingDays: "א׳–ה׳", workingHours: "09:00–17:00" },
+  { id: "s2", name: "מיכל לוי", role: "יועצת עסקית", workingDays: "א׳–ד׳", workingHours: "10:00–18:00" },
+  { id: "s3", name: "דניאל אברהם", role: "רואה חשבון", workingDays: "ב׳–ו׳", workingHours: "09:00–15:00" },
 ];
 
 export type ServiceDefinition = {
@@ -29,11 +29,11 @@ export type ServiceDefinition = {
 };
 
 export const services: ServiceDefinition[] = [
-  { name: "תספורת", durationMinutes: 45, price: 120, color: "service-1" },
-  { name: "ייעוץ", durationMinutes: 45, price: 80, color: "service-3" },
-  { name: "קיצוץ זקן", durationMinutes: 30, price: 60, color: "service-2" },
-  { name: "צביעה", durationMinutes: 60, price: 220, color: "service-4" },
-  { name: "עיסוי", durationMinutes: 45, price: 180, color: "service-5" },
+  { name: "ייעוץ ראשוני", durationMinutes: 45, price: 350, color: "service-1" },
+  { name: "עריכת חוזה", durationMinutes: 45, price: 650, color: "service-3" },
+  { name: "ייעוץ מס", durationMinutes: 30, price: 450, color: "service-2" },
+  { name: "בדיקת נאותות", durationMinutes: 60, price: 800, color: "service-4" },
+  { name: "ליווי משפטי", durationMinutes: 45, price: 500, color: "service-5" },
 ];
 
 export type DayAppointment = {
@@ -48,12 +48,12 @@ export type DayAppointment = {
 };
 
 export const initialAppointments: DayAppointment[] = [
-  { id: "1", clientName: "שרה לוי", serviceName: "תספורת", start: "09:00", end: "09:45", color: "service-1", staffId: "s1", status: "confirmed" },
-  { id: "2", clientName: "מיכל כהן", serviceName: "ייעוץ", start: "10:00", end: "10:45", color: "service-3", staffId: "s2", status: "confirmed" },
-  { id: "3", clientName: "דוד לוי", serviceName: "קיצוץ זקן", start: "11:00", end: "11:30", color: "service-2", staffId: "s1", status: "pending" },
-  { id: "4", clientName: "אמה ישראלי", serviceName: "צביעה", start: "12:00", end: "13:00", color: "service-4", staffId: "s3", status: "confirmed" },
-  { id: "5", clientName: "אולגה פרץ", serviceName: "תספורת", start: "14:00", end: "14:45", color: "service-1", staffId: "s2", status: "cancelled" },
-  { id: "6", clientName: "יוסי מזרחי", serviceName: "עיסוי", start: "10:30", end: "11:15", color: "service-5", staffId: "s3", status: "completed" },
+  { id: "1", clientName: "שרה לוי", serviceName: "ייעוץ ראשוני", start: "09:00", end: "09:45", color: "service-1", staffId: "s1", status: "confirmed" },
+  { id: "2", clientName: "מיכל כהן", serviceName: "עריכת חוזה", start: "10:00", end: "10:45", color: "service-3", staffId: "s2", status: "confirmed" },
+  { id: "3", clientName: "דוד לוי", serviceName: "ייעוץ מס", start: "11:00", end: "11:30", color: "service-2", staffId: "s1", status: "pending" },
+  { id: "4", clientName: "אמה ישראלי", serviceName: "בדיקת נאותות", start: "12:00", end: "13:00", color: "service-4", staffId: "s3", status: "confirmed" },
+  { id: "5", clientName: "אולגה פרץ", serviceName: "ייעוץ ראשוני", start: "14:00", end: "14:45", color: "service-1", staffId: "s2", status: "cancelled" },
+  { id: "6", clientName: "יוסי מזרחי", serviceName: "ליווי משפטי", start: "10:30", end: "11:15", color: "service-5", staffId: "s3", status: "completed" },
 ];
 
 export function timeToMinutes(time: string): number {

@@ -1,8 +1,9 @@
 @AGENTS.md
 
-# Bookora — Project Rules
+# LYNKO — Project Rules
 
 A smart appointment-scheduling dashboard for small/medium businesses. Hebrew, RTL.
+Branded as "Book with LYNKO".
 The rules below are non-negotiable — every line of code in this project must
 follow them, no exceptions, no "just this once."
 
@@ -71,6 +72,12 @@ follow them, no exceptions, no "just this once."
   at the root to work — `min-height` doesn't reliably give flex children
   a definite size to grow into, which left the sidebar only as tall as
   the page content on short pages.
+- **Flex children need explicit `min-h-0` for `overflow-y-auto` to work.**
+  Flex items default to `min-height: auto`, refusing to shrink below their
+  content's natural size. Without `min-h-0` on a scrollable flex child
+  (e.g. the app shell's `<main>`), long content pushes it taller than its
+  allocated space instead of clipping/scrolling internally — which drags
+  the whole page (including a fixed sidebar) into native scroll.
 
 ## Scroll / animation architecture (lessons from past projects — do not repeat)
 - **No `zoom` on a wrapper** — it breaks `scroll`, `getBoundingClientRect`,

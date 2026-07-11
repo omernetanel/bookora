@@ -3,8 +3,8 @@ import { assistant, googleSans } from "@/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Bookora",
-  description: "מערכת ניהול תורים חכמה לעסקים קטנים ובינוניים",
+  title: "LYNKO",
+  description: "Book with LYNKO — מערכת ניהול תורים חכמה לעסקים קטנים ובינוניים",
 };
 
 export default function RootLayout({
