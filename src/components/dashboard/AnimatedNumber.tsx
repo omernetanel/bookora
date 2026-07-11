@@ -6,13 +6,14 @@ import { animate, useMotionValue, useTransform } from "framer-motion";
 type AnimatedNumberProps = {
   value: number;
   prefix?: string;
+  suffix?: string;
 };
 
-export function AnimatedNumber({ value, prefix = "" }: AnimatedNumberProps) {
+export function AnimatedNumber({ value, prefix = "", suffix = "" }: AnimatedNumberProps) {
   const spanRef = useRef<HTMLSpanElement>(null);
   const motionValue = useMotionValue(0);
   const formatted = useTransform(motionValue, (latest) =>
-    `${prefix}${Math.round(latest).toLocaleString("en-US")}`,
+    `${prefix}${Math.round(latest).toLocaleString("en-US")}${suffix}`,
   );
 
   useEffect(() => {

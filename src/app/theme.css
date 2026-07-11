@@ -32,6 +32,24 @@
   --color-service-4: #7d4468;
   --color-service-5: #83693f;
 
+  /* Chart marks — validated against the card surface (#161618, dark mode)
+     via the dataviz skill's OKLCH checks (lightness band, chroma floor, CVD
+     separation, contrast). Fixed categorical order, hue-matched to
+     service-1..5 respectively; never cycle or reorder. */
+  --color-chart-1: #3987e5;
+  --color-chart-2: #199e70;
+  --color-chart-3: #9085e9;
+  --color-chart-4: #d55181;
+  --color-chart-5: #d95926;
+
+  /* Sequential ramp — single hue, monotonic lightness, validated as an
+     ordinal ramp for the busy-hours heatmap (low → high intensity). */
+  --color-chart-heat-1: #004fa8;
+  --color-chart-heat-2: #1367c3;
+  --color-chart-heat-3: #3280dd;
+  --color-chart-heat-4: #4c99f9;
+  --color-chart-heat-5: #65b3ff;
+
   /* Fonts */
   --font-sans: var(--font-assistant);
   --font-heading: var(--font-google-sans);

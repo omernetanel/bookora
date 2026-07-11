@@ -11,6 +11,7 @@ import {
   Users,
   Tag,
   UserCog,
+  BarChart3,
   Settings,
   LogOut,
 } from "lucide-react";
@@ -22,6 +23,7 @@ const navItems = [
   { href: "/clients", label: "לקוחות", icon: Users },
   { href: "/services", label: "שירותים", icon: Tag },
   { href: "/staff", label: "צוות", icon: UserCog },
+  { href: "/reports", label: "דוחות", icon: BarChart3 },
   { href: "/settings", label: "הגדרות", icon: Settings },
 ] as const;
 
