@@ -9,12 +9,12 @@
   --color-foreground: #f7f7f8;
   --color-muted-foreground: #9797a8;
 
-  /* Brand — precise system blue, not purple. Purple was doing double duty
-     as both the accent and service-1, which is what made everything read
-     as one purple-tinted "galaxy" palette instead of a deliberate one. */
-  --color-primary: #0a84ff;
+  /* Brand — matches the LYNKO logomark's deep violet-indigo. This is a
+     deliberate, logo-anchored purple, not the earlier speculative
+     "galaxy" purple that also doubled as service-1. */
+  --color-primary: #5b3fa6;
   --color-primary-foreground: #ffffff;
-  --color-ring: #0a84ff;
+  --color-ring: #5b3fa6;
 
   /* Status */
   --color-success: #22c55e;
