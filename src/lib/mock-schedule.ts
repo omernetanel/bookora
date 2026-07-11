@@ -11,14 +11,15 @@ export type StaffMember = {
   id: string;
   name: string;
   role: string;
+  avatarUrl: string;
   workingDays: string;
   workingHours: string;
 };
 
 export const staffMembers: StaffMember[] = [
-  { id: "s1", name: "אור כהן", role: "עו״ד בכיר", workingDays: "א׳–ה׳", workingHours: "09:00–17:00" },
-  { id: "s2", name: "מיכל לוי", role: "יועצת עסקית", workingDays: "א׳–ד׳", workingHours: "10:00–18:00" },
-  { id: "s3", name: "דניאל אברהם", role: "רואה חשבון", workingDays: "ב׳–ו׳", workingHours: "09:00–15:00" },
+  { id: "s1", name: "אור כהן", role: "עו״ד בכיר", avatarUrl: "/oruser.png", workingDays: "א׳–ה׳", workingHours: "09:00–17:00" },
+  { id: "s2", name: "מיכל לוי", role: "יועצת עסקית", avatarUrl: "/michaluser.png", workingDays: "א׳–ד׳", workingHours: "10:00–18:00" },
+  { id: "s3", name: "דניאל אברהם", role: "רואה חשבון", avatarUrl: "/danieluser.png", workingDays: "ב׳–ו׳", workingHours: "09:00–15:00" },
 ];
 
 export type ServiceDefinition = {

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { TopBar } from "@/components/layout/TopBar";
 import { Card } from "@/components/ui/Card";
 import { staffMembers } from "@/lib/mock-schedule";
@@ -10,9 +11,13 @@ export default function StaffPage() {
       <div className="grid grid-cols-3 gap-4 px-8 pb-8">
         {staffMembers.map((member) => (
           <Card key={member.id} className="flex flex-col items-center gap-3 text-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-lg font-semibold text-primary">
-              {member.name.charAt(0)}
-            </div>
+            <Image
+              src={member.avatarUrl}
+              alt=""
+              width={56}
+              height={56}
+              className="h-14 w-14 rounded-full border border-border object-cover"
+            />
             <div>
               <h3 className="font-heading text-lg font-semibold text-foreground">
                 {member.name}

@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, useEffect, useState } from "react";
+import Image from "next/image";
 import { ChevronLeft, ChevronRight, CheckCircle2, Plus } from "lucide-react";
 import {
   GRID_ROW_START,
@@ -228,9 +229,13 @@ export function DayCalendar() {
         <div />
         {staffMembers.map((member) => (
           <div key={member.id} className="flex items-center gap-2 px-1 pb-3">
-            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border bg-background text-xs font-semibold text-foreground">
-              {member.name.charAt(0)}
-            </div>
+            <Image
+              src={member.avatarUrl}
+              alt=""
+              width={28}
+              height={28}
+              className="h-7 w-7 shrink-0 rounded-full border border-border object-cover"
+            />
             <span className="truncate text-sm font-medium text-foreground">
               {member.name}
             </span>
