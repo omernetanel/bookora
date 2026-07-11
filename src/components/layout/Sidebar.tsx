@@ -30,7 +30,7 @@ export function Sidebar() {
 
   return (
     <aside className="flex h-full w-64 flex-col border-e border-border bg-card">
-      <div className="flex items-center gap-3 px-6 py-6">
+      <div dir="ltr" className="flex items-center justify-start gap-3 px-6 py-6">
         <Image
           src="/lynkoicon.png"
           alt=""
