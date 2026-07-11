@@ -9,12 +9,14 @@
   --color-foreground: #f7f7f8;
   --color-muted-foreground: #9797a8;
 
-  /* Brand — matches the LYNKO logomark's deep violet-indigo. This is a
-     deliberate, logo-anchored purple, not the earlier speculative
-     "galaxy" purple that also doubled as service-1. */
-  --color-primary: #5b3fa6;
+  /* Brand — same hue/saturation as the LYNKO logomark (sampled directly
+     from public/lynkoicon.png: ~hsl(270 59% 19%)), lightened to ~42%
+     for UI use so it reads clearly against the near-black background.
+     The logo file itself is never recolored — only this UI accent is
+     a brightened derivative of it. */
+  --color-primary: #6b30a6;
   --color-primary-foreground: #ffffff;
-  --color-ring: #5b3fa6;
+  --color-ring: #6b30a6;
 
   /* Status */
   --color-success: #22c55e;

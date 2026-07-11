@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
@@ -30,11 +31,14 @@ export function Sidebar() {
   return (
     <aside className="flex h-full w-64 flex-col border-e border-border bg-card">
       <div className="flex items-center gap-3 px-6 py-6">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-          <span className="font-heading text-lg font-bold text-primary-foreground">
-            L
-          </span>
-        </div>
+        <Image
+          src="/lynkoicon.png"
+          alt=""
+          width={36}
+          height={36}
+          className="shrink-0"
+          priority
+        />
         <span className="font-heading text-xl font-bold text-foreground">
           LYNKO
         </span>
