@@ -4,7 +4,7 @@ import { staffMembers } from "@/lib/mock-schedule";
 
 export default function StaffPage() {
   return (
-    <main className="flex flex-1 flex-col overflow-y-auto">
+    <main className="flex min-h-0 flex-1 flex-col overflow-y-auto">
       <TopBar title="צוות" subtitle={`${staffMembers.length} אנשי צוות`} />
 
       <div className="grid grid-cols-3 gap-4 px-8 pb-8">

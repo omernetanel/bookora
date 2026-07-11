@@ -25,7 +25,7 @@ const appointments: AppointmentRow[] = [
 
 export default function AppointmentsPage() {
   return (
-    <main className="flex flex-1 flex-col overflow-y-auto">
+    <main className="flex min-h-0 flex-1 flex-col overflow-y-auto">
       <TopBar title="תורים" subtitle="כל התורים הקרובים במקום אחד" />
 
       <div className="flex flex-col gap-6 px-8 pb-8">

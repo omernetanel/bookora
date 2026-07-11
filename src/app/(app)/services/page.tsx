@@ -12,7 +12,7 @@ const SERVICE_BG: Record<ServiceColor, string> = {
 
 export default function ServicesPage() {
   return (
-    <main className="flex flex-1 flex-col overflow-y-auto">
+    <main className="flex min-h-0 flex-1 flex-col overflow-y-auto">
       <TopBar title="שירותים" subtitle={`${services.length} שירותים פעילים`} />
 
       <div className="grid grid-cols-3 gap-4 px-8 pb-8">
