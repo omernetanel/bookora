@@ -1,3 +1,5 @@
+import { mulberry32 } from "./seeded-random";
+
 export type ServiceColor =
   | "service-1"
   | "service-2"
@@ -93,4 +95,99 @@ export function findConflict(
       return startMinutes < existingEnd && existingStart < endMinutes;
     }) ?? null
   );
+}
+
+// The calendar's single hand-authored day — every other date is generated
+// on the fly (see getAppointmentsForDate) so day navigation has something
+// to show without needing a real backend.
+export const REFERENCE_DATE = new Date(2026, 4, 14);
+
+export function dateKey(date: Date): string {
+  return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+}
+
+function isSameDate(a: Date, b: Date): boolean {
+  return dateKey(a) === dateKey(b);
+}
+
+const HEBREW_MONTHS_WITH_PREFIX = [
+  "בינואר", "בפברואר", "במרץ", "באפריל", "במאי", "ביוני",
+  "ביולי", "באוגוסט", "בספטמבר", "באוקטובר", "בנובמבר", "בדצמבר",
+];
+
+export function formatHebrewDate(date: Date): string {
+  return `${date.getDate()} ${HEBREW_MONTHS_WITH_PREFIX[date.getMonth()]}, ${date.getFullYear()}`;
+}
+
+const DEMO_CLIENT_POOL = [
+  "שרה לוי", "מיכל כהן", "דוד לוי", "אמה ישראלי", "אולגה פרץ", "יוסי מזרחי",
+  "רונית אבני", "עומר שגיא", "נועה פישר", "אליהו בר", "תמר גולן", "איתי שני",
+];
+
+// Weighted so most generated appointments read as routine, not exceptional.
+const DEMO_STATUS_POOL: AppointmentStatus[] = [
+  "confirmed", "confirmed", "confirmed", "pending", "completed", "cancelled",
+];
+
+/** Deterministic per-date appointment list — same date always yields the
+ * same result (no Math.random()/Date.now(), see CLAUDE.md "Lessons
+ * learned"), so the demo calendar has plausible data on any day a visitor
+ * navigates to without a real backend. Closed Saturdays and short Fridays
+ * mirror a typical Israeli business week. */
+export function getAppointmentsForDate(date: Date): DayAppointment[] {
+  if (isSameDate(date, REFERENCE_DATE)) return initialAppointments;
+
+  const weekday = date.getDay(); // 0 = Sunday … 6 = Saturday
+  if (weekday === 6) return [];
+
+  const isFriday = weekday === 5;
+  const dayEndHour = isFriday ? 13 : 17;
+  const dayStartMinutes = 9 * 60;
+  const dayEndMinutes = dayEndHour * 60;
+
+  const seed = date.getFullYear() * 10000 + (date.getMonth() + 1) * 100 + date.getDate();
+  const random = mulberry32(seed);
+  const appointmentCount = isFriday
+    ? Math.round(1 + random() * 2)
+    : Math.round(2 + random() * 5);
+
+  const appointments: DayAppointment[] = [];
+
+  for (let i = 0; i < appointmentCount; i++) {
+    const staff = staffMembers[Math.floor(random() * staffMembers.length)];
+    const service = services[Math.floor(random() * services.length)];
+
+    const latestStart = dayEndMinutes - service.durationMinutes;
+    if (latestStart <= dayStartMinutes) continue;
+
+    const quarterSteps = Math.floor((latestStart - dayStartMinutes) / 15) + 1;
+    const startMinutes = dayStartMinutes + Math.floor(random() * quarterSteps) * 15;
+    const start = `${String(Math.floor(startMinutes / 60)).padStart(2, "0")}:${String(startMinutes % 60).padStart(2, "0")}`;
+    const end = addMinutesToTime(start, service.durationMinutes);
+    const endMinutes = timeToMinutes(end);
+
+    // Unlike findConflict (used for real bookings, where a cancelled slot is
+    // meant to free up), the generator must never place two cards in the
+    // same visual cell — a cancelled appointment still occupies grid space.
+    const overlapsExisting = appointments.some(
+      (existing) =>
+        existing.staffId === staff.id &&
+        startMinutes < timeToMinutes(existing.end) &&
+        timeToMinutes(existing.start) < endMinutes,
+    );
+    if (overlapsExisting) continue;
+
+    appointments.push({
+      id: `${dateKey(date)}-${i}`,
+      clientName: DEMO_CLIENT_POOL[Math.floor(random() * DEMO_CLIENT_POOL.length)],
+      serviceName: service.name,
+      start,
+      end,
+      color: service.color,
+      staffId: staff.id,
+      status: DEMO_STATUS_POOL[Math.floor(random() * DEMO_STATUS_POOL.length)],
+    });
+  }
+
+  return appointments.sort((a, b) => timeToMinutes(a.start) - timeToMinutes(b.start));
 }

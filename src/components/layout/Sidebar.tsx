@@ -32,7 +32,7 @@ export function Sidebar() {
 
   return (
     <aside className="flex h-full w-64 flex-col border-e border-border bg-card">
-      <div dir="ltr" className="flex items-center px-6 py-6">
+      <div dir="ltr" className="flex items-center px-6 pt-6">
         <Image
           src="/lynkologow.png"
           alt="LYNKO"
@@ -41,6 +41,10 @@ export function Sidebar() {
           className="h-9 w-auto"
           priority
         />
+      </div>
+
+      <div className="mx-6 mb-4 mt-3 w-fit rounded-full border border-border bg-background px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
+        תצוגת דמו
       </div>
 
       <nav className="flex flex-1 flex-col gap-1 px-4">

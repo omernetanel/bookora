@@ -20,6 +20,12 @@ const DEFAULT_VALUES: AppointmentFormValues = {
   start: "09:00",
 };
 
+function formatDateLTR(date: Date): string {
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  return `${day}/${month}/${date.getFullYear()}`;
+}
+
 function valuesFromAppointment(appointment: DayAppointment): AppointmentFormValues {
   const serviceIndex = services.findIndex(
     (service) => service.name === appointment.serviceName,
@@ -38,6 +44,7 @@ type AppointmentModalProps = {
   editingAppointment: DayAppointment | null;
   onSave: (values: AppointmentFormValues, editingId: string | null) => string | null;
   onCancelAppointment: (id: string) => void;
+  date: Date;
 };
 
 export function AppointmentModal({
@@ -46,6 +53,7 @@ export function AppointmentModal({
   editingAppointment,
   onSave,
   onCancelAppointment,
+  date,
 }: AppointmentModalProps) {
   const [values, setValues] = useState<AppointmentFormValues>(() =>
     editingAppointment ? valuesFromAppointment(editingAppointment) : DEFAULT_VALUES,
@@ -174,7 +182,7 @@ export function AppointmentModal({
                     type="text"
                     dir="ltr"
                     disabled
-                    value="14/05/2026"
+                    value={formatDateLTR(date)}
                     className="rounded-lg border border-border bg-background px-3 py-2 text-sm text-muted-foreground disabled:cursor-not-allowed"
                   />
                 </label>

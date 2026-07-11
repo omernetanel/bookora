@@ -12,8 +12,11 @@ import {
 } from "@/lib/calendar-grid";
 import {
   addMinutesToTime,
+  dateKey,
   findConflict,
-  initialAppointments,
+  formatHebrewDate,
+  getAppointmentsForDate,
+  REFERENCE_DATE,
   services,
   staffMembers,
   type DayAppointment,
@@ -47,12 +50,18 @@ const STATUS_CLASSES: Record<DayAppointment["status"], string> = {
 // purpose, so it stays a discoverable literal for Tailwind's build scanner.
 const STAFF_COL_START = ["col-start-2", "col-start-3", "col-start-4"] as const;
 
-function useNowRowStart(): number | null {
+// Only shows the live time indicator when the viewed date is the real
+// current day — otherwise a "now" line on a past/future date would be wrong.
+function useNowRowStart(viewedDate: Date): number | null {
   const [nowRowStart, setNowRowStart] = useState<number | null>(null);
 
   useEffect(() => {
     function update() {
       const now = new Date();
+      if (dateKey(now) !== dateKey(viewedDate)) {
+        setNowRowStart(null);
+        return;
+      }
       const hours = now.getHours();
       if (hours < RANGE_START_HOUR || hours >= RANGE_START_HOUR + HOURS.length) {
         setNowRowStart(null);
@@ -65,17 +74,40 @@ function useNowRowStart(): number | null {
     update();
     const interval = setInterval(update, 60_000);
     return () => clearInterval(interval);
-  }, []);
+  }, [viewedDate]);
 
   return nowRowStart;
 }
 
 export function DayCalendar() {
-  const nowRowStart = useNowRowStart();
-  const [appointments, setAppointments] = useState<DayAppointment[]>(initialAppointments);
+  const [currentDate, setCurrentDate] = useState<Date>(REFERENCE_DATE);
+  const nowRowStart = useNowRowStart(currentDate);
+  const [appointmentsByDate, setAppointmentsByDate] = useState<Record<string, DayAppointment[]>>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingAppointment, setEditingAppointment] = useState<DayAppointment | null>(null);
   const [modalSession, setModalSession] = useState(0);
+
+  const currentKey = dateKey(currentDate);
+  const appointments = appointmentsByDate[currentKey] ?? getAppointmentsForDate(currentDate);
+
+  function updateAppointments(updater: (current: DayAppointment[]) => DayAppointment[]) {
+    setAppointmentsByDate((current) => ({
+      ...current,
+      [currentKey]: updater(current[currentKey] ?? getAppointmentsForDate(currentDate)),
+    }));
+  }
+
+  function changeDay(deltaDays: number) {
+    setCurrentDate((current) => {
+      const next = new Date(current);
+      next.setDate(next.getDate() + deltaDays);
+      return next;
+    });
+  }
+
+  function goToToday() {
+    setCurrentDate(new Date());
+  }
 
   function openCreateModal() {
     setEditingAppointment(null);
@@ -119,7 +151,7 @@ export function DayCalendar() {
         : "confirmed",
     };
 
-    setAppointments((current) =>
+    updateAppointments((current) =>
       editingId
         ? current.map((appointment) => (appointment.id === editingId ? updated : appointment))
         : [...current, updated],
@@ -129,7 +161,7 @@ export function DayCalendar() {
   }
 
   function handleCancelAppointment(id: string) {
-    setAppointments((current) =>
+    updateAppointments((current) =>
       current.map((appointment) =>
         appointment.id === id ? { ...appointment, status: "cancelled" } : appointment,
       ),
@@ -140,7 +172,7 @@ export function DayCalendar() {
     <section className="rounded-xl border border-border bg-card p-6 shadow-card">
       <div className="mb-6 flex items-center justify-between">
         <h2 className="font-heading text-lg font-semibold text-foreground">
-          14 במאי, 2026
+          {formatHebrewDate(currentDate)}
         </h2>
 
         <div className="flex items-center gap-3">
@@ -148,12 +180,14 @@ export function DayCalendar() {
             <button
               type="button"
               aria-label="היום הקודם"
+              onClick={() => changeDay(-1)}
               className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:bg-border/40"
             >
               <ChevronRight className="h-4 w-4" />
             </button>
             <button
               type="button"
+              onClick={goToToday}
               className="rounded-lg border border-border px-3 py-1.5 text-sm text-foreground transition-colors hover:bg-border/40"
             >
               היום
@@ -161,6 +195,7 @@ export function DayCalendar() {
             <button
               type="button"
               aria-label="היום הבא"
+              onClick={() => changeDay(1)}
               className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:bg-border/40"
             >
               <ChevronLeft className="h-4 w-4" />
@@ -176,13 +211,17 @@ export function DayCalendar() {
             </button>
             <button
               type="button"
-              className="rounded-md px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+              disabled
+              title="בקרוב"
+              className="cursor-not-allowed rounded-md px-3 py-1.5 text-sm text-muted-foreground opacity-40"
             >
               שבוע
             </button>
             <button
               type="button"
-              className="rounded-md px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+              disabled
+              title="בקרוב"
+              className="cursor-not-allowed rounded-md px-3 py-1.5 text-sm text-muted-foreground opacity-40"
             >
               חודש
             </button>
@@ -223,6 +262,7 @@ export function DayCalendar() {
         editingAppointment={editingAppointment}
         onSave={handleSave}
         onCancelAppointment={handleCancelAppointment}
+        date={currentDate}
       />
 
       <div className="grid grid-cols-[3.5rem_repeat(3,1fr)] gap-x-2">
@@ -313,6 +353,14 @@ export function DayCalendar() {
           >
             <span className="h-2 w-2 shrink-0 rounded-full bg-destructive" />
             <span className="h-px flex-1 bg-destructive" />
+          </div>
+        ) : null}
+
+        {appointments.length === 0 ? (
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <p className="rounded-lg border border-border bg-card px-4 py-2 text-sm text-muted-foreground shadow-card">
+              אין תורים מתוכננים ליום זה
+            </p>
           </div>
         ) : null}
       </div>
