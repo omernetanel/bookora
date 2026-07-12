@@ -104,7 +104,7 @@ export function AppointmentModal({
             role="dialog"
             aria-modal="true"
             aria-labelledby="appointment-modal-title"
-            className="relative flex w-full max-w-md flex-col gap-5 rounded-xl border border-border bg-card p-6 shadow-card"
+            className="relative flex max-h-[90vh] w-full max-w-md flex-col gap-5 overflow-y-auto rounded-xl border border-border bg-card p-6 shadow-card"
           >
             <div className="flex items-center justify-between">
               <h2

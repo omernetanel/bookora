@@ -2,6 +2,8 @@
 // These must exist as literal strings (not template-built) so Tailwind's
 // build-time scanner can find and generate them.
 
+import { timeToMinutes } from "./mock-schedule";
+
 export const GRID_ROW_START = [
   "row-start-1", "row-start-2", "row-start-3", "row-start-4", "row-start-5",
   "row-start-6", "row-start-7", "row-start-8", "row-start-9", "row-start-10",
@@ -23,11 +25,6 @@ export const GRID_ROW_SPAN = [
 ] as const;
 
 export const QUARTERS_PER_HOUR = 4;
-
-function timeToMinutes(time: string): number {
-  const [hours, minutes] = time.split(":").map(Number);
-  return hours * 60 + minutes;
-}
 
 /** 1-indexed grid row where a time slot starts, relative to `rangeStartHour`. */
 export function timeToRowStart(time: string, rangeStartHour: number): number {

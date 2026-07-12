@@ -1,14 +1,7 @@
 import { TopBar } from "@/components/layout/TopBar";
 import { Card } from "@/components/ui/Card";
-import { services, type ServiceColor } from "@/lib/mock-schedule";
-
-const SERVICE_BG: Record<ServiceColor, string> = {
-  "service-1": "bg-service-1",
-  "service-2": "bg-service-2",
-  "service-3": "bg-service-3",
-  "service-4": "bg-service-4",
-  "service-5": "bg-service-5",
-};
+import { services } from "@/lib/mock-schedule";
+import { SERVICE_BG } from "@/lib/appointment-styles";
 
 export default function ServicesPage() {
   return (
