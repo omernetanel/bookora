@@ -12,7 +12,7 @@ export default function SettingsPage() {
     <main className="flex min-h-0 flex-1 flex-col overflow-y-auto">
       <TopBar title="הגדרות" subtitle="פרטי העסק ושעות פעילות" />
 
-      <div className="flex flex-col gap-6 px-8 pb-8">
+      <div className="flex flex-col gap-6 px-4 pb-8 sm:px-6 lg:px-8">
         <Card className="flex flex-col gap-5">
           <div>
             <h2 className="font-heading text-lg font-semibold text-foreground">
@@ -23,7 +23,7 @@ export default function SettingsPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {businessFields.map((field) => (
               <label key={field.label} className="flex flex-col gap-1.5">
                 <span className="text-sm font-medium text-foreground">

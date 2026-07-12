@@ -32,7 +32,7 @@ export function TopBar({ title, subtitle }: TopBarProps) {
   }
 
   return (
-    <header className="sticky top-0 z-20 flex items-center justify-between bg-background px-8 py-6">
+    <header className="sticky top-0 z-20 flex items-center justify-between bg-background px-4 py-6 sm:px-6 lg:px-8">
       <div className="flex items-center gap-3">
         <button
           ref={menuButtonRef}

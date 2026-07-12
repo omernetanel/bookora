@@ -15,7 +15,7 @@ export default function ServicesPage() {
     <main className="flex min-h-0 flex-1 flex-col overflow-y-auto">
       <TopBar title="שירותים" subtitle={`${services.length} שירותים פעילים`} />
 
-      <div className="grid grid-cols-3 gap-4 px-8 pb-8">
+      <div className="grid grid-cols-1 gap-4 px-4 pb-8 sm:grid-cols-2 sm:px-6 lg:grid-cols-3 lg:px-8">
         {services.map((service) => (
           <Card key={service.name} className="flex flex-col gap-3">
             <div className="flex">

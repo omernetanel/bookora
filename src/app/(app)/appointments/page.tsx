@@ -28,9 +28,9 @@ export default function AppointmentsPage() {
     <main className="flex min-h-0 flex-1 flex-col overflow-y-auto">
       <TopBar title="תורים" subtitle="כל התורים הקרובים במקום אחד" />
 
-      <div className="flex flex-col gap-6 px-8 pb-8">
+      <div className="flex flex-col gap-6 px-4 pb-8 sm:px-6 lg:px-8">
         <Card className="p-0">
-          <table className="w-full text-sm">
+          <table className="hidden w-full text-sm lg:table">
             <thead>
               <tr className="border-b border-border text-xs text-muted-foreground">
                 <th className="px-6 py-4 font-medium">לקוח</th>
@@ -58,6 +58,23 @@ export default function AppointmentsPage() {
               ))}
             </tbody>
           </table>
+
+          <div className="flex flex-col divide-y divide-border lg:hidden">
+            {appointments.map((appointment) => (
+              <div key={appointment.id} className="flex flex-col gap-1.5 p-4">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-medium text-foreground">{appointment.clientName}</span>
+                  <StatusBadge status={appointment.status} />
+                </div>
+                <span className="text-sm text-muted-foreground">
+                  {appointment.serviceName} · {appointment.staffName}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  {appointment.date} · <span dir="ltr">{appointment.time}</span>
+                </span>
+              </div>
+            ))}
+          </div>
         </Card>
       </div>
     </main>

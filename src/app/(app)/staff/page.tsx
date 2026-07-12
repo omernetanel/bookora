@@ -8,7 +8,7 @@ export default function StaffPage() {
     <main className="flex min-h-0 flex-1 flex-col overflow-y-auto">
       <TopBar title="צוות" subtitle={`${staffMembers.length} אנשי צוות`} />
 
-      <div className="grid grid-cols-3 gap-4 px-8 pb-8">
+      <div className="grid grid-cols-1 gap-4 px-4 pb-8 sm:grid-cols-2 sm:px-6 lg:grid-cols-3 lg:px-8">
         {staffMembers.map((member) => (
           <Card key={member.id} className="flex flex-col items-center gap-3 text-center">
             <Image

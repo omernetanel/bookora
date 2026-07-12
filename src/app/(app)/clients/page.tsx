@@ -24,9 +24,9 @@ export default function ClientsPage() {
     <main className="flex min-h-0 flex-1 flex-col overflow-y-auto">
       <TopBar title="לקוחות" subtitle={`${clients.length} לקוחות רשומים`} />
 
-      <div className="flex flex-col gap-6 px-8 pb-8">
+      <div className="flex flex-col gap-6 px-4 pb-8 sm:px-6 lg:px-8">
         <Card className="p-0">
-          <table className="w-full text-sm">
+          <table className="hidden w-full text-sm lg:table">
             <thead>
               <tr className="border-b border-border text-xs text-muted-foreground">
                 <th className="px-6 py-4 font-medium">שם</th>
@@ -67,6 +67,37 @@ export default function ClientsPage() {
               ))}
             </tbody>
           </table>
+
+          <div className="flex flex-col divide-y divide-border lg:hidden">
+            {clients.map((client) => (
+              <div key={client.id} className="flex flex-col gap-1.5 p-4">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-medium text-foreground">{client.name}</span>
+                  {client.tags.length > 0 ? (
+                    <div className="flex gap-1.5">
+                      {client.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="rounded-full bg-border px-2.5 py-1 text-xs font-medium text-foreground"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+                <span dir="ltr" className="text-end text-sm text-muted-foreground">
+                  {client.phone}
+                </span>
+                <span dir="ltr" className="text-end text-sm text-muted-foreground">
+                  {client.email}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  ביקור אחרון: {client.lastVisit}
+                </span>
+              </div>
+            ))}
+          </div>
         </Card>
       </div>
     </main>

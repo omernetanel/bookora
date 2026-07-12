@@ -36,7 +36,7 @@ export default function DashboardPage() {
     <main className="flex min-h-0 flex-1 flex-col overflow-y-auto">
       <TopBar title="לוח בקרה" subtitle="ברוך שובך, אור כהן!" />
 
-      <div className="flex flex-col gap-6 px-8 pb-8">
+      <div className="flex flex-col gap-6 px-4 pb-8 sm:px-6 lg:px-8">
         <StatCardGrid>
           <StatCard label="תורים היום" value={appointmentsToday} />
           <StatCard label="השבוע" value={appointmentsThisWeek} />

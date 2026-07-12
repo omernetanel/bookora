@@ -20,7 +20,7 @@ export default function ReportsPage() {
     <main className="flex min-h-0 flex-1 flex-col overflow-y-auto">
       <TopBar title="דוחות" subtitle="ביצועים, הכנסות ותפוסה לאורך זמן" />
 
-      <div className="flex flex-col gap-6 px-8 pb-8">
+      <div className="flex flex-col gap-6 px-4 pb-8 sm:px-6 lg:px-8">
         <StatCardGrid>
           <StatCard label="הכנסות החודש" value={reportKpis.monthlyRevenue} prefix="₪" />
           <StatCard label="תורים החודש" value={reportKpis.monthlyAppointments} />
@@ -28,7 +28,7 @@ export default function ReportsPage() {
           <StatCard label="תפוסה ממוצעת" value={reportKpis.avgUtilization} suffix="%" />
         </StatCardGrid>
 
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <Card className="flex flex-col gap-4">
             <div>
               <h2 className="font-heading text-lg font-semibold text-foreground">

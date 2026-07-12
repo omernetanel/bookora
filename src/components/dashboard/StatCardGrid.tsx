@@ -22,7 +22,7 @@ export function StatCardGrid({ children }: { children: ReactNode }) {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="grid grid-cols-4 gap-4"
+      className="grid grid-cols-2 gap-4 lg:grid-cols-4"
     >
       {Children.map(children, (child) => (
         <motion.div variants={itemVariants}>{child}</motion.div>
