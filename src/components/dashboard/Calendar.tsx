@@ -7,6 +7,7 @@ import {
   dateKey,
   findConflict,
   formatHebrewDate,
+  formatHebrewMonth,
   formatHebrewWeekRange,
   getAppointmentsForDate,
   REFERENCE_DATE,
@@ -22,9 +23,10 @@ import {
 } from "./AppointmentModal";
 import { DayView } from "./DayView";
 import { WeekView } from "./WeekView";
+import { MonthView } from "./MonthView";
 import { Button } from "@/components/ui/Button";
 
-type ViewMode = "day" | "week";
+type ViewMode = "day" | "week" | "month";
 
 export function Calendar() {
   const [currentDate, setCurrentDate] = useState<Date>(REFERENCE_DATE);
@@ -63,6 +65,24 @@ export function Calendar() {
       next.setDate(next.getDate() + deltaDays);
       return next;
     });
+  }
+
+  function changeMonth(deltaMonths: number) {
+    setCurrentDate((current) => {
+      const next = new Date(current);
+      next.setMonth(next.getMonth() + deltaMonths);
+      return next;
+    });
+  }
+
+  function goToPrevious() {
+    if (viewMode === "month") changeMonth(-1);
+    else changeDate(viewMode === "week" ? -7 : -1);
+  }
+
+  function goToNext() {
+    if (viewMode === "month") changeMonth(1);
+    else changeDate(viewMode === "week" ? 7 : 1);
   }
 
   function goToToday() {
@@ -133,8 +153,11 @@ export function Calendar() {
 
   const weekStart = startOfWeek(currentDate);
   const heading =
-    viewMode === "day" ? formatHebrewDate(currentDate) : formatHebrewWeekRange(weekStart);
-  const stepDays = viewMode === "day" ? 1 : 7;
+    viewMode === "day"
+      ? formatHebrewDate(currentDate)
+      : viewMode === "week"
+        ? formatHebrewWeekRange(weekStart)
+        : formatHebrewMonth(currentDate);
 
   return (
     <section className="rounded-xl border border-border bg-card p-6 shadow-card">
@@ -146,7 +169,7 @@ export function Calendar() {
             <button
               type="button"
               aria-label="הקודם"
-              onClick={() => changeDate(-stepDays)}
+              onClick={goToPrevious}
               className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:bg-border/40"
             >
               <ChevronRight className="h-4 w-4" />
@@ -161,7 +184,7 @@ export function Calendar() {
             <button
               type="button"
               aria-label="הבא"
-              onClick={() => changeDate(stepDays)}
+              onClick={goToNext}
               className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:bg-border/40"
             >
               <ChevronLeft className="h-4 w-4" />
@@ -193,9 +216,12 @@ export function Calendar() {
             </button>
             <button
               type="button"
-              disabled
-              title="בקרוב"
-              className="cursor-not-allowed rounded-md px-3 py-1.5 text-sm text-muted-foreground opacity-40"
+              onClick={() => setViewMode("month")}
+              className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                viewMode === "month"
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
             >
               חודש
             </button>
@@ -224,11 +250,20 @@ export function Calendar() {
           appointments={getAppointmentsFor(currentDate)}
           onEditAppointment={openEditModal}
         />
-      ) : (
+      ) : viewMode === "week" ? (
         <WeekView
           weekStart={weekStart}
           getAppointments={getAppointmentsFor}
           onEditAppointment={openEditModal}
+          onSelectDay={(date) => {
+            setCurrentDate(date);
+            setViewMode("day");
+          }}
+        />
+      ) : (
+        <MonthView
+          currentDate={currentDate}
+          getAppointments={getAppointmentsFor}
           onSelectDay={(date) => {
             setCurrentDate(date);
             setViewMode("day");

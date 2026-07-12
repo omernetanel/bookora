@@ -141,6 +141,29 @@ export function formatHebrewWeekRange(weekStart: Date): string {
   return `${startLabel} – ${endLabel}, ${weekEnd.getFullYear()}`;
 }
 
+export function formatHebrewMonth(date: Date): string {
+  return `${HEBREW_MONTHS[date.getMonth()]} ${date.getFullYear()}`;
+}
+
+/** All dates for the calendar grid of the month containing `date` — full
+ * weeks (Sunday–Saturday) from before the 1st through after the last day,
+ * so the grid never shows a partial week. */
+export function monthGridDays(date: Date): Date[] {
+  const monthStart = new Date(date.getFullYear(), date.getMonth(), 1);
+  const monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+  const gridStart = startOfWeek(monthStart);
+  const gridEnd = startOfWeek(monthEnd);
+  gridEnd.setDate(gridEnd.getDate() + 6);
+
+  const days: Date[] = [];
+  const cursor = new Date(gridStart);
+  while (cursor <= gridEnd) {
+    days.push(new Date(cursor));
+    cursor.setDate(cursor.getDate() + 1);
+  }
+  return days;
+}
+
 const DEMO_CLIENT_POOL = [
   "שרה לוי", "מיכל כהן", "דוד לוי", "אמה ישראלי", "אולגה פרץ", "יוסי מזרחי",
   "רונית אבני", "עומר שגיא", "נועה פישר", "אליהו בר", "תמר גולן", "איתי שני",
