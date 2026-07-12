@@ -162,10 +162,10 @@ export function Calendar() {
 
   return (
     <section className="rounded-xl border border-border bg-card p-6 shadow-card">
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <h2 className="font-heading text-lg font-semibold text-foreground">{heading}</h2>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-2">
             <button
               type="button"
