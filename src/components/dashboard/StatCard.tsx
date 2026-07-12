@@ -9,6 +9,8 @@ type StatCardProps = {
 };
 
 export function StatCard({ label, value, prefix, suffix, delta }: StatCardProps) {
+  const isNegativeDelta = delta?.trim().startsWith("-") ?? false;
+
   return (
     <div className="rounded-xl border border-white/10 bg-card/60 p-6 shadow-card backdrop-blur-md">
       <p className="text-sm text-muted-foreground">{label}</p>
@@ -17,7 +19,10 @@ export function StatCard({ label, value, prefix, suffix, delta }: StatCardProps)
           <AnimatedNumber value={value} prefix={prefix} suffix={suffix} />
         </span>
         {delta ? (
-          <span dir="ltr" className="text-sm font-medium text-success">
+          <span
+            dir="ltr"
+            className={`text-sm font-medium ${isNegativeDelta ? "text-destructive" : "text-success"}`}
+          >
             {delta}
           </span>
         ) : null}

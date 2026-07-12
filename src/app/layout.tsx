@@ -5,6 +5,8 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "LYNKO",
   description: "Book with LYNKO — מערכת ניהול תורים חכמה לעסקים קטנים ובינוניים",
+  // Public demo, not the real product — keep it out of search results.
+  robots: { index: false, follow: false },
 };
 
 export default function RootLayout({
