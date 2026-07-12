@@ -6,8 +6,14 @@ import { RevenueTrendChart } from "@/components/reports/RevenueTrendChart";
 import { ServiceBreakdownChart } from "@/components/reports/ServiceBreakdownChart";
 import { StaffUtilizationChart } from "@/components/reports/StaffUtilizationChart";
 import { BusyHeatmap } from "@/components/reports/BusyHeatmap";
+import { CancellationRateChart } from "@/components/reports/CancellationRateChart";
 import { TopClientsTable } from "@/components/reports/TopClientsTable";
-import { reportKpis } from "@/lib/mock-reports";
+import { cancellationRate, reportKpis } from "@/lib/mock-reports";
+
+const avgCancellationRate =
+  Math.round(
+    (cancellationRate.reduce((sum, point) => sum + point.rate, 0) / cancellationRate.length) * 10,
+  ) / 10;
 
 export default function ReportsPage() {
   return (
@@ -63,6 +69,16 @@ export default function ReportsPage() {
             <BusyHeatmap />
           </Card>
         </div>
+
+        <Card className="flex flex-col gap-4">
+          <div>
+            <h2 className="font-heading text-lg font-semibold text-foreground">שיעור ביטולים</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              <span dir="ltr">{avgCancellationRate}%</span> ממוצע של 8 השבועות האחרונים
+            </p>
+          </div>
+          <CancellationRateChart />
+        </Card>
 
         <Card className="flex flex-col gap-4">
           <div>

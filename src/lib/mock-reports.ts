@@ -30,6 +30,17 @@ export const weeklyRevenue: WeeklyRevenuePoint[] = Array.from({ length: 8 }, (_,
   return { label: formatDateLabel(date), revenue: Math.max(9000, 21000 + trend + noise) };
 });
 
+export type CancellationRatePoint = { label: string; rate: number };
+
+// Cancellation rate tends to run a little higher on weeks with a revenue
+// dip and lower on strong weeks — same 8-week window as weeklyRevenue, same
+// labels, so the two charts read as one timeline.
+export const cancellationRate: CancellationRatePoint[] = weeklyRevenue.map((point) => {
+  const noise = (random() - 0.5) * 6;
+  const rate = Math.max(3, Math.min(22, 11 + noise));
+  return { label: point.label, rate: Math.round(rate * 10) / 10 };
+});
+
 export type ServiceRevenue = { name: string; revenue: number; fill: string };
 
 export const revenueByService: ServiceRevenue[] = services
