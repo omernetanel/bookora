@@ -22,6 +22,7 @@ import {
   type AppointmentFormValues,
 } from "./AppointmentModal";
 import { DayView } from "./DayView";
+import { DayViewMobile } from "./DayViewMobile";
 import { WeekView } from "./WeekView";
 import { MonthView } from "./MonthView";
 import { Button } from "@/components/ui/Button";
@@ -245,11 +246,22 @@ export function Calendar() {
       />
 
       {viewMode === "day" ? (
-        <DayView
-          currentDate={currentDate}
-          appointments={getAppointmentsFor(currentDate)}
-          onEditAppointment={openEditModal}
-        />
+        <>
+          <div className="hidden lg:block">
+            <DayView
+              currentDate={currentDate}
+              appointments={getAppointmentsFor(currentDate)}
+              onEditAppointment={openEditModal}
+            />
+          </div>
+          <div className="lg:hidden">
+            <DayViewMobile
+              currentDate={currentDate}
+              appointments={getAppointmentsFor(currentDate)}
+              onEditAppointment={openEditModal}
+            />
+          </div>
+        </>
       ) : viewMode === "week" ? (
         <WeekView
           weekStart={weekStart}
