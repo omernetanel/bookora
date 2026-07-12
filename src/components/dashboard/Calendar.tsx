@@ -13,6 +13,7 @@ import {
   services,
   staffMembers,
   startOfWeek,
+  timeToMinutes,
   type DayAppointment,
 } from "@/lib/mock-schedule";
 import {
@@ -46,7 +47,13 @@ export function Calendar() {
     const key = dateKey(date);
     setAppointmentsByDate((current) => ({
       ...current,
-      [key]: updater(current[key] ?? getAppointmentsForDate(date)),
+      // Sorted here (not just at generation time) so WeekView — which
+      // renders in array order rather than positioning by time like
+      // DayView — stays correct after a create/edit/cancel, not just on
+      // first load.
+      [key]: updater(current[key] ?? getAppointmentsForDate(date)).sort(
+        (a, b) => timeToMinutes(a.start) - timeToMinutes(b.start),
+      ),
     }));
   }
 
