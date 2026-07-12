@@ -1,0 +1,233 @@
+"use client";
+
+import { useState } from "react";
+import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
+import {
+  addMinutesToTime,
+  dateKey,
+  findConflict,
+  formatHebrewDate,
+  formatHebrewWeekRange,
+  getAppointmentsForDate,
+  REFERENCE_DATE,
+  services,
+  staffMembers,
+  startOfWeek,
+  type DayAppointment,
+} from "@/lib/mock-schedule";
+import {
+  AppointmentModal,
+  type AppointmentFormValues,
+} from "./AppointmentModal";
+import { DayView } from "./DayView";
+import { WeekView } from "./WeekView";
+import { Button } from "@/components/ui/Button";
+
+type ViewMode = "day" | "week";
+
+export function Calendar() {
+  const [currentDate, setCurrentDate] = useState<Date>(REFERENCE_DATE);
+  const [viewMode, setViewMode] = useState<ViewMode>("day");
+  const [appointmentsByDate, setAppointmentsByDate] = useState<Record<string, DayAppointment[]>>({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingAppointment, setEditingAppointment] = useState<DayAppointment | null>(null);
+  const [editingDate, setEditingDate] = useState<Date>(REFERENCE_DATE);
+  const [modalSession, setModalSession] = useState(0);
+
+  function getAppointmentsFor(date: Date): DayAppointment[] {
+    const key = dateKey(date);
+    return appointmentsByDate[key] ?? getAppointmentsForDate(date);
+  }
+
+  function updateAppointmentsFor(
+    date: Date,
+    updater: (current: DayAppointment[]) => DayAppointment[],
+  ) {
+    const key = dateKey(date);
+    setAppointmentsByDate((current) => ({
+      ...current,
+      [key]: updater(current[key] ?? getAppointmentsForDate(date)),
+    }));
+  }
+
+  function changeDate(deltaDays: number) {
+    setCurrentDate((current) => {
+      const next = new Date(current);
+      next.setDate(next.getDate() + deltaDays);
+      return next;
+    });
+  }
+
+  function goToToday() {
+    setCurrentDate(new Date());
+  }
+
+  function openCreateModal() {
+    setEditingAppointment(null);
+    setEditingDate(currentDate);
+    setIsModalOpen(true);
+    setModalSession((session) => session + 1);
+  }
+
+  function openEditModal(appointment: DayAppointment, date: Date) {
+    setEditingAppointment(appointment);
+    setEditingDate(date);
+    setIsModalOpen(true);
+    setModalSession((session) => session + 1);
+  }
+
+  function handleSave(values: AppointmentFormValues, editingId: string | null): string | null {
+    const service = services[values.serviceIndex];
+    const end = addMinutesToTime(values.start, service.durationMinutes);
+    const dayAppointments = getAppointmentsFor(editingDate);
+    const conflict = findConflict(
+      dayAppointments,
+      values.staffId,
+      values.start,
+      end,
+      editingId ?? undefined,
+    );
+
+    if (conflict) {
+      const staffName =
+        staffMembers.find((member) => member.id === values.staffId)?.name ?? "";
+      return `השעה הזו כבר תפוסה אצל ${staffName} — ${conflict.clientName} (${conflict.start}–${conflict.end})`;
+    }
+
+    const updated: DayAppointment = {
+      id: editingId ?? crypto.randomUUID(),
+      clientName: values.clientName,
+      serviceName: service.name,
+      color: service.color,
+      staffId: values.staffId,
+      start: values.start,
+      end,
+      status: editingId
+        ? dayAppointments.find((appointment) => appointment.id === editingId)?.status ?? "confirmed"
+        : "confirmed",
+    };
+
+    updateAppointmentsFor(editingDate, (current) =>
+      editingId
+        ? current.map((appointment) => (appointment.id === editingId ? updated : appointment))
+        : [...current, updated],
+    );
+
+    return null;
+  }
+
+  function handleCancelAppointment(id: string) {
+    updateAppointmentsFor(editingDate, (current) =>
+      current.map((appointment) =>
+        appointment.id === id ? { ...appointment, status: "cancelled" } : appointment,
+      ),
+    );
+  }
+
+  const weekStart = startOfWeek(currentDate);
+  const heading =
+    viewMode === "day" ? formatHebrewDate(currentDate) : formatHebrewWeekRange(weekStart);
+  const stepDays = viewMode === "day" ? 1 : 7;
+
+  return (
+    <section className="rounded-xl border border-border bg-card p-6 shadow-card">
+      <div className="mb-6 flex items-center justify-between">
+        <h2 className="font-heading text-lg font-semibold text-foreground">{heading}</h2>
+
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              aria-label="הקודם"
+              onClick={() => changeDate(-stepDays)}
+              className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:bg-border/40"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={goToToday}
+              className="rounded-lg border border-border px-3 py-1.5 text-sm text-foreground transition-colors hover:bg-border/40"
+            >
+              היום
+            </button>
+            <button
+              type="button"
+              aria-label="הבא"
+              onClick={() => changeDate(stepDays)}
+              className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:bg-border/40"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+          </div>
+
+          <div className="flex items-center gap-1 rounded-lg border border-border p-1">
+            <button
+              type="button"
+              onClick={() => setViewMode("day")}
+              className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                viewMode === "day"
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              יום
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode("week")}
+              className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                viewMode === "week"
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              שבוע
+            </button>
+            <button
+              type="button"
+              disabled
+              title="בקרוב"
+              className="cursor-not-allowed rounded-md px-3 py-1.5 text-sm text-muted-foreground opacity-40"
+            >
+              חודש
+            </button>
+          </div>
+
+          <Button onClick={openCreateModal} className="px-3 py-1.5">
+            <Plus className="h-4 w-4" />
+            תור חדש
+          </Button>
+        </div>
+      </div>
+
+      <AppointmentModal
+        key={modalSession}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        editingAppointment={editingAppointment}
+        onSave={handleSave}
+        onCancelAppointment={handleCancelAppointment}
+        date={editingDate}
+      />
+
+      {viewMode === "day" ? (
+        <DayView
+          currentDate={currentDate}
+          appointments={getAppointmentsFor(currentDate)}
+          onEditAppointment={openEditModal}
+        />
+      ) : (
+        <WeekView
+          weekStart={weekStart}
+          getAppointments={getAppointmentsFor}
+          onEditAppointment={openEditModal}
+          onSelectDay={(date) => {
+            setCurrentDate(date);
+            setViewMode("day");
+          }}
+        />
+      )}
+    </section>
+  );
+}

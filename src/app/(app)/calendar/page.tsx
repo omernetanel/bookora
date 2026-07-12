@@ -1,5 +1,5 @@
 import { TopBar } from "@/components/layout/TopBar";
-import { DayCalendar } from "@/components/dashboard/DayCalendar";
+import { Calendar } from "@/components/dashboard/Calendar";
 
 export default function CalendarPage() {
   return (
@@ -7,7 +7,7 @@ export default function CalendarPage() {
       <TopBar title="יומן" subtitle="לוח הזמנים המלא של העסק" />
 
       <div className="flex flex-col gap-6 px-8 pb-8">
-        <DayCalendar />
+        <Calendar />
       </div>
     </main>
   );

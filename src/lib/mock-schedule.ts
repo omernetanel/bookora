@@ -115,8 +115,30 @@ const HEBREW_MONTHS_WITH_PREFIX = [
   "ביולי", "באוגוסט", "בספטמבר", "באוקטובר", "בנובמבר", "בדצמבר",
 ];
 
+const HEBREW_MONTHS = [
+  "ינואר", "פברואר", "מרץ", "אפריל", "מאי", "יוני",
+  "יולי", "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר", "דצמבר",
+];
+
+export const HEBREW_WEEKDAY_SHORT = ["א׳", "ב׳", "ג׳", "ד׳", "ה׳", "ו׳", "ש׳"];
+
 export function formatHebrewDate(date: Date): string {
   return `${date.getDate()} ${HEBREW_MONTHS_WITH_PREFIX[date.getMonth()]}, ${date.getFullYear()}`;
+}
+
+/** Sunday-based start of the week containing `date`. */
+export function startOfWeek(date: Date): Date {
+  const start = new Date(date);
+  start.setDate(start.getDate() - start.getDay());
+  return start;
+}
+
+export function formatHebrewWeekRange(weekStart: Date): string {
+  const weekEnd = new Date(weekStart);
+  weekEnd.setDate(weekEnd.getDate() + 6);
+  const startLabel = `${weekStart.getDate()} ${HEBREW_MONTHS[weekStart.getMonth()]}`;
+  const endLabel = `${weekEnd.getDate()} ${HEBREW_MONTHS[weekEnd.getMonth()]}`;
+  return `${startLabel} – ${endLabel}, ${weekEnd.getFullYear()}`;
 }
 
 const DEMO_CLIENT_POOL = [
@@ -135,7 +157,14 @@ const DEMO_STATUS_POOL: AppointmentStatus[] = [
  * navigates to without a real backend. Closed Saturdays and short Fridays
  * mirror a typical Israeli business week. */
 export function getAppointmentsForDate(date: Date): DayAppointment[] {
-  if (isSameDate(date, REFERENCE_DATE)) return initialAppointments;
+  // Chronological order matters beyond the grid-positioned day view (e.g.
+  // WeekView stacks a day's appointments top-to-bottom), so every branch
+  // returns sorted — not just the generated ones.
+  if (isSameDate(date, REFERENCE_DATE)) {
+    return [...initialAppointments].sort(
+      (a, b) => timeToMinutes(a.start) - timeToMinutes(b.start),
+    );
+  }
 
   const weekday = date.getDay(); // 0 = Sunday … 6 = Saturday
   if (weekday === 6) return [];

@@ -1,8 +1,8 @@
 import { TopBar } from "@/components/layout/TopBar";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { StatCardGrid } from "@/components/dashboard/StatCardGrid";
-import { DayCalendar } from "@/components/dashboard/DayCalendar";
-import { getAppointmentsForDate } from "@/lib/mock-schedule";
+import { Calendar } from "@/components/dashboard/Calendar";
+import { getAppointmentsForDate, startOfWeek } from "@/lib/mock-schedule";
 import { reportKpis, weeklyRevenue } from "@/lib/mock-reports";
 
 // Recomputed per request (not frozen at build time) so "today"/"this week"
@@ -12,12 +12,6 @@ export const dynamic = "force-dynamic";
 function countActiveAppointments(date: Date): number {
   return getAppointmentsForDate(date).filter((appointment) => appointment.status !== "cancelled")
     .length;
-}
-
-function startOfWeek(date: Date): Date {
-  const start = new Date(date);
-  start.setDate(start.getDate() - start.getDay());
-  return start;
 }
 
 export default function DashboardPage() {
@@ -55,7 +49,7 @@ export default function DashboardPage() {
           />
         </StatCardGrid>
 
-        <DayCalendar />
+        <Calendar />
       </div>
     </main>
   );
