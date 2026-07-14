@@ -25,8 +25,8 @@ export const weeklyRevenue: WeeklyRevenuePoint[] = Array.from({ length: 8 }, (_,
   const weeksAgo = 7 - i;
   const date = new Date(REFERENCE_DATE);
   date.setDate(date.getDate() - weeksAgo * 7);
-  const trend = i * 850;
-  const noise = Math.round((random() - 0.5) * 5000);
+  const trend = i * 1100;
+  const noise = Math.round((random() - 0.5) * 2000);
   return { label: formatDateLabel(date), revenue: Math.max(9000, 21000 + trend + noise) };
 });
 

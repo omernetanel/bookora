@@ -192,7 +192,7 @@ export function Calendar() {
             </button>
           </div>
 
-          <div className="flex items-center gap-1 rounded-lg border border-border p-1">
+          <div data-tour="view-toggle" className="flex items-center gap-1 rounded-lg border border-border p-1">
             <button
               type="button"
               onClick={() => setViewMode("day")}

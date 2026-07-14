@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Bell, ChevronDown, Menu } from "lucide-react";
+import { Bell, ChevronDown, HelpCircle, Menu } from "lucide-react";
 import { NotificationsPanel } from "./NotificationsPanel";
 import { useSidebar } from "./SidebarProvider";
+import { useTour } from "@/components/tour/TourProvider";
 
 type TopBarProps = {
   title: string;
@@ -18,6 +19,8 @@ export function TopBar({ title, subtitle }: TopBarProps) {
   const { isOpen: isSidebarOpen, toggle: toggleSidebar } = useSidebar();
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const wasSidebarOpenRef = useRef(false);
+
+  const { start: startTour } = useTour();
 
   useEffect(() => {
     if (wasSidebarOpenRef.current && !isSidebarOpen) {
@@ -65,10 +68,21 @@ export function TopBar({ title, subtitle }: TopBarProps) {
           <ChevronDown className="h-4 w-4 text-muted-foreground" />
         </button>
 
+        <button
+          type="button"
+          aria-label="הפעל סיור מודרך"
+          title="סיור מודרך"
+          onClick={startTour}
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-border/40"
+        >
+          <HelpCircle className="h-5 w-5" />
+        </button>
+
         <div ref={notificationsRef} className="relative">
           <button
             type="button"
             aria-label="התראות"
+            data-tour="notifications-bell"
             onClick={toggleNotifications}
             className="relative flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:bg-border/40"
           >
