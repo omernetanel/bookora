@@ -8,6 +8,7 @@ import { StaffUtilizationChart } from "@/components/reports/StaffUtilizationChar
 import { BusyHeatmap } from "@/components/reports/BusyHeatmap";
 import { CancellationRateChart } from "@/components/reports/CancellationRateChart";
 import { TopClientsTable } from "@/components/reports/TopClientsTable";
+import { ExportButton } from "@/components/reports/ExportButton";
 import { cancellationRate, reportKpis } from "@/lib/mock-reports";
 
 const avgCancellationRate =
@@ -21,6 +22,10 @@ export default function ReportsPage() {
       <TopBar title="דוחות" subtitle="ביצועים, הכנסות ותפוסה לאורך זמן" />
 
       <div className="flex flex-col gap-6 px-4 pb-8 sm:px-6 lg:px-8">
+        <div className="flex justify-end">
+          <ExportButton label="ייצוא הדוח ל-PDF" />
+        </div>
+
         <StatCardGrid>
           <StatCard label="הכנסות החודש" value={reportKpis.monthlyRevenue} prefix="₪" />
           <StatCard label="תורים החודש" value={reportKpis.monthlyAppointments} />
@@ -30,62 +35,80 @@ export default function ReportsPage() {
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <Card className="flex flex-col gap-4">
-            <div>
-              <h2 className="font-heading text-lg font-semibold text-foreground">
-                הכנסות שבועיות
-              </h2>
-              <p className="mt-1 text-sm text-muted-foreground">8 השבועות האחרונים</p>
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <h2 className="font-heading text-lg font-semibold text-foreground">
+                  הכנסות שבועיות
+                </h2>
+                <p className="mt-1 text-sm text-muted-foreground">8 השבועות האחרונים</p>
+              </div>
+              <ExportButton label="ייצוא CSV" />
             </div>
             <RevenueTrendChart />
           </Card>
 
           <Card className="flex flex-col gap-4">
-            <div>
-              <h2 className="font-heading text-lg font-semibold text-foreground">
-                הכנסות לפי שירות
-              </h2>
-              <p className="mt-1 text-sm text-muted-foreground">החודש הנוכחי</p>
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <h2 className="font-heading text-lg font-semibold text-foreground">
+                  הכנסות לפי שירות
+                </h2>
+                <p className="mt-1 text-sm text-muted-foreground">החודש הנוכחי</p>
+              </div>
+              <ExportButton label="ייצוא CSV" />
             </div>
             <ServiceBreakdownChart />
           </Card>
 
           <Card className="flex flex-col gap-4">
-            <div>
-              <h2 className="font-heading text-lg font-semibold text-foreground">תפוסת צוות</h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                אחוז זמן תפוס מתוך שעות עבודה
-              </p>
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <h2 className="font-heading text-lg font-semibold text-foreground">תפוסת צוות</h2>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  אחוז זמן תפוס מתוך שעות עבודה
+                </p>
+              </div>
+              <ExportButton label="ייצוא CSV" />
             </div>
             <StaffUtilizationChart />
           </Card>
 
           <Card className="flex flex-col gap-4">
-            <div>
-              <h2 className="font-heading text-lg font-semibold text-foreground">שעות עומס</h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                התפלגות תורים לפי יום ושעה
-              </p>
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <h2 className="font-heading text-lg font-semibold text-foreground">שעות עומס</h2>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  התפלגות תורים לפי יום ושעה
+                </p>
+              </div>
+              <ExportButton label="ייצוא CSV" />
             </div>
             <BusyHeatmap />
           </Card>
         </div>
 
         <Card className="flex flex-col gap-4">
-          <div>
-            <h2 className="font-heading text-lg font-semibold text-foreground">שיעור ביטולים</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              <span dir="ltr">{avgCancellationRate}%</span> ממוצע של 8 השבועות האחרונים
-            </p>
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h2 className="font-heading text-lg font-semibold text-foreground">שיעור ביטולים</h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                <span dir="ltr">{avgCancellationRate}%</span> ממוצע של 8 השבועות האחרונים
+              </p>
+            </div>
+            <ExportButton label="ייצוא CSV" />
           </div>
           <CancellationRateChart />
         </Card>
 
         <Card className="flex flex-col gap-4">
-          <div>
-            <h2 className="font-heading text-lg font-semibold text-foreground">
-              לקוחות מובילים
-            </h2>
-            <p className="mt-1 text-sm text-muted-foreground">לפי סך הוצאה מצטברת</p>
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <h2 className="font-heading text-lg font-semibold text-foreground">
+                לקוחות מובילים
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">לפי סך הוצאה מצטברת</p>
+            </div>
+            <ExportButton label="ייצוא CSV" />
           </div>
           <TopClientsTable />
         </Card>
