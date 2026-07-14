@@ -3,10 +3,8 @@ import { assistant, googleSans } from "@/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "LYNKO",
+  title: "LYNKO — ניהול תורים שנבנה בעברית",
   description: "Book with LYNKO — מערכת ניהול תורים חכמה לעסקים קטנים ובינוניים",
-  // Public demo, not the real product — keep it out of search results.
-  robots: { index: false, follow: false },
 };
 
 export default function RootLayout({
@@ -20,9 +18,7 @@ export default function RootLayout({
       dir="rtl"
       className={`${assistant.variable} ${googleSans.variable} h-full antialiased`}
     >
-      <body className="flex h-dvh flex-col bg-background font-sans text-foreground">
-        {children}
-      </body>
+      <body className="bg-background font-sans text-foreground">{children}</body>
     </html>
   );
 }

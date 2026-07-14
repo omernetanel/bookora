@@ -19,14 +19,14 @@ import {
 import { useSidebar } from "./SidebarProvider";
 
 const navItems = [
-  { href: "/", label: "לוח בקרה", icon: LayoutDashboard },
-  { href: "/calendar", label: "יומן", icon: Calendar },
-  { href: "/appointments", label: "תורים", icon: ClipboardList },
-  { href: "/clients", label: "לקוחות", icon: Users },
-  { href: "/services", label: "שירותים", icon: Tag },
-  { href: "/staff", label: "צוות", icon: UserCog },
-  { href: "/reports", label: "דוחות", icon: BarChart3 },
-  { href: "/settings", label: "הגדרות", icon: Settings },
+  { href: "/demo", label: "לוח בקרה", icon: LayoutDashboard },
+  { href: "/demo/calendar", label: "יומן", icon: Calendar },
+  { href: "/demo/appointments", label: "תורים", icon: ClipboardList },
+  { href: "/demo/clients", label: "לקוחות", icon: Users },
+  { href: "/demo/services", label: "שירותים", icon: Tag },
+  { href: "/demo/staff", label: "צוות", icon: UserCog },
+  { href: "/demo/reports", label: "דוחות", icon: BarChart3 },
+  { href: "/demo/settings", label: "הגדרות", icon: Settings },
 ] as const;
 
 export function Sidebar() {
