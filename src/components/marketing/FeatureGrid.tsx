@@ -44,11 +44,16 @@ export function FeatureGrid() {
           <motion.div
             key={feature.title}
             variants={fadeUp}
+            whileHover="hover"
             className="rounded-xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:border-primary/40"
           >
-            <span className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/15 text-primary">
+            <motion.span
+              variants={{ hover: { scale: 1.12, rotate: -6 } }}
+              transition={{ type: "spring", stiffness: 300, damping: 15 }}
+              className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/15 text-primary"
+            >
               <Icon className="h-5 w-5" />
-            </span>
+            </motion.span>
             <h3 className="font-heading text-base font-bold text-foreground">{feature.title}</h3>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
               {feature.description}

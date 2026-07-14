@@ -81,6 +81,12 @@ export function CalendarPreview() {
           </span>
         </div>
 
+        <div className="mb-3 inline-flex items-center gap-1 rounded-lg border border-border p-1 text-xs">
+          <span className="rounded-md bg-primary/10 px-2.5 py-1 font-medium text-primary">יום</span>
+          <span className="px-2.5 py-1 text-muted-foreground">שבוע</span>
+          <span className="px-2.5 py-1 text-muted-foreground">חודש</span>
+        </div>
+
         <div className="flex flex-col gap-2">
           {APPOINTMENTS.map((appointment, index) => (
             <Fragment key={appointment.time}>

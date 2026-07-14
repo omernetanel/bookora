@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -16,7 +17,10 @@ export function MarketingNav() {
   }, []);
 
   return (
-    <header
+    <motion.header
+      initial={{ opacity: 0, y: -16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: [0.2, 0.7, 0.2, 1] }}
       className={`sticky top-0 z-40 border-b bg-background/70 backdrop-blur-md transition-colors ${
         isScrolled ? "border-border" : "border-transparent"
       }`}
@@ -32,6 +36,6 @@ export function MarketingNav() {
           כניסה לדמו
         </Link>
       </div>
-    </header>
+    </motion.header>
   );
 }
