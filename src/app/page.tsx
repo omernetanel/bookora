@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { AmbientBackground } from "@/components/marketing/AmbientBackground";
 import { MarketingNav } from "@/components/marketing/MarketingNav";
 import { Hero } from "@/components/marketing/Hero";
+import { ScrollStory } from "@/components/marketing/ScrollStory";
 import { SectionHeading } from "@/components/marketing/SectionHeading";
 import { FeatureGrid } from "@/components/marketing/FeatureGrid";
 import { AudienceSection } from "@/components/marketing/AudienceSection";
@@ -20,6 +21,8 @@ export default function LandingPage() {
 
       <main className="flex-1">
         <Hero />
+
+        <ScrollStory />
 
         <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:px-8">
           <SectionHeading
