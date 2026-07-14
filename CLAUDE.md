@@ -78,22 +78,11 @@ follow them, no exceptions, no "just this once."
   (e.g. the app shell's `<main>`), long content pushes it taller than its
   allocated space instead of clipping/scrolling internally — which drags
   the whole page (including a fixed sidebar) into native scroll.
-
-## Scroll / animation architecture (lessons from past projects — do not repeat)
-- **No `zoom` on a wrapper** — it breaks `scroll`, `getBoundingClientRect`,
-  and `offsetTop`.
-- Any section with a scroll-linked animation must live **outside** any
-  zoom/transform wrapper.
-- `useScroll` with a `target` ref is not reliable together with
-  `position: sticky`. For correct offset measurement, use
-  `getBoundingClientRect().top + window.scrollY`.
-- `useSpring` can introduce lag; when immediate responsiveness is needed,
-  use the raw progress value directly.
-- The scroll listener should only run once the DOM has settled
-  (`setTimeout(..., 150)`).
-- Scroll-triggered animations start only when the element enters the
-  viewport, never on mount.
-- `position: sticky` breaks if any ancestor has `overflow: hidden`.
+- **A delta/change value's color must come from its sign, not be hardcoded.**
+  A stat like `-2.0%` rendered in green because the "good" color was
+  hardcoded instead of checked — only surfaced once the value became a
+  real computed number instead of a fixed positive string. Derive
+  positive/negative styling from the value itself (e.g. `startsWith("-")`).
 
 ## Visual rules
 - No glow / colored box-shadow on buttons — looks cheap.
